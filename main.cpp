@@ -34,6 +34,7 @@ int main(int argc, char** argv) {
         "madrid01.dat", "madrid02.dat", "madrid03.dat", "madrid04.dat",
         "malaga01.dat", "malaga02.dat", "malaga03.dat", "malaga04.dat",
     };
+    Set_random(DNI);
     
     vector<Aeropuerto> a(archivos.size());
     
@@ -52,8 +53,9 @@ int main(int argc, char** argv) {
         cout << "\n";
     }
     
-    // Prueba greedy
     Algoritmos alg;
+    
+    // Prueba greedy
     for(int i = 0; i < archivos.size(); i++){
         cout << "-------------------------------------------------\n";
         cout << "   SOLUCION GREEDY PARA : "+ a[i].nombre +"\n";
@@ -61,8 +63,15 @@ int main(int argc, char** argv) {
         
         a[i].sol = alg.greedy(a[i].flujo, a[i].distancia);
         //Mostrar datos
-        alg.mostrarGreedy(a[i].sol);
-        
+        //alg.mostrarGreedy(a[i].sol);
+    }
+    
+    // Prueba Local del mejor
+    for(int i=0; i < archivos.size(); i++){
+        cout << "-------------------------------------------------\n";
+        cout << "   SOLUCION LOCAL MEJOR PARA : "+ a[i].nombre +"\n";
+        cout << "-------------------------------------------------\n";
+        alg.localMejor(a[i].flujo, a[i].distancia);
     }
     
     return 0;

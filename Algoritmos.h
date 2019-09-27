@@ -11,7 +11,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <memory>
 #include "Parametros.h"
+#include "random.h"
 
 using namespace std;
 
@@ -66,6 +68,24 @@ public:
         } 
     }
     
+    vector<int> localMejor(vector<vector<int>>& flu, vector<vector<int>>& dis){
+        vector<int> solInicial(flu.size());
+        solInicial = creaSolucion(flu.size());
+        
+        vector< vector<int>> solCandidatas(NUM_MOV_LOCAL);
+        //Creo posibles movimientos
+        int evaluaciones = 0;
+        int intentos = 0;
+        for(int i = 0; i < NUM_MOV_LOCAL; i++){
+            vector<int> sol(flu.size());
+            sol = generaSol(solInicial);
+            solCandidatas[i] = sol;
+        }
+        
+        return solInicial;
+        
+    }
+    
 private:
     int menor(vector<int>& v){
         int pos = 0;
@@ -91,6 +111,34 @@ private:
         v[pos] = INT_MIN; // Marco la posicion como seleccionada
         return pos;
     }
+    
+    vector<int> creaSolucion(int tam){
+        vector<int> solucion(tam);
+        for(int i = 0; i < tam; i++){
+            solucion[i]=i;
+        }
+        
+        
+
+        for(int i = 0; i < tam/2; i++){
+            // La primera generacion de numeros aleatorios sale generan el mismo
+            // número, por eso se deben de ejecutar un minimo de 2 veces el swap
+            swap(solucion[Randint(0,tam-1)],solucion[Randint(0,tam-1)]);
+        } 
+        
+        // Lectura de la solucion
+        for(int i = 0; i < tam; i++){
+            cout << solucion[i] << "    ";
+        } 
+        return solucion;
+    }
+    
+    vector<int> generaSol(vector<int> solInicial){
+        swap(solInicial[Randint(0,solInicial.size()-1)],
+                solInicial[Randint(0,solInicial.size()-1)]);
+        return solInicial;
+    }
+    
 };
 
 #endif /* ALGORITMOS_H */

@@ -16,6 +16,10 @@
 
     int INT_MAX = +2147483647;
     int INT_MIN = -2147483648;
-
+    int DNI = 26515294;
+    int NUM_MOV_LOCAL = 10;
+    int MAX_INTENTOS = 100;
+    int LIM_EVA_LOCAL = 50000;
+    
 #endif /* PARAMETROS_H */
 
