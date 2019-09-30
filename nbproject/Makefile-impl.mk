@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=Practica 1
+PROJECTNAME=practica-1
 
 # Active Configuration
 DEFAULTCONF=Debug

@@ -19,14 +19,16 @@ using namespace std;
 
 class Algoritmos {
 public:
-    int coste (vector<vector<int>>& flu, vector<vector<int>>& dis){
-        int sol = 0;
+    int coste (vector<int> sol, vector<vector<int>>& flu, vector<vector<int>>& dis){
+        int coste = 0;
         for (int i = 0; i < flu.size(); i++){
             for(int j = 0; j < flu.size(); j++){
-                sol = flu[i][j]*dis[i][j] + flu[j][i]*dis[j][i];
+                if(i != j){
+                    coste = flu[i][j]*dis[sol[i]][sol[j]];
+                }
             }
         }
-        return sol;
+        return coste;
     }
     
     vector<int> greedy(vector<vector<int>>& flu, vector<vector<int>>& dis){
@@ -44,17 +46,6 @@ public:
             }
         }
         
-        // Comprobaciones
-//        for(int i = 0; i < solDis.size() ; i++){
-//            cout <<"("<<i+1<<")"<< solDis[i] << "  ";
-//        }
-//        cout << "\n";
-//        for(int i = 0; i < solFlu.size() ; i++){
-//            cout << "("<<i+1<<")"<< solFlu[i] << "  ";
-//        }
-//        cout << "\n";
-        // fin de las comprobaciones
-        
         vector<int> solucion(flu.size());
         for(int i = 0; i < solucion.size(); i++){
             solucion[mayor(solFlu)] = menor(solDis);
@@ -64,7 +55,7 @@ public:
     
     void mostrarGreedy(vector<int>& v){
         for(int i = 0; i < v.size(); i++){
-            cout << "   La puerta " << (i+1) << " con " << v[i]+1 << "\n";
+            cout << " (" << (i+1) << ") - " << v[i]+1 << "\n";
         } 
     }
     
@@ -74,12 +65,15 @@ public:
         
         vector< vector<int>> solCandidatas(NUM_MOV_LOCAL);
         //Creo posibles movimientos
-        int evaluaciones = 0;
         int intentos = 0;
-        for(int i = 0; i < NUM_MOV_LOCAL; i++){
-            vector<int> sol(flu.size());
-            sol = generaSol(solInicial);
-            solCandidatas[i] = sol;
+        int pos = 0;
+        vector<int> cambios(flu.size()); 
+        cambios = generaCambios(solInicial.size());
+        for(int i = 0; i < cambios.size(); i++){
+            if(cambios[i] != -1){
+                solCandidatas[pos] = intercambia(solInicial, i, cambios[i]);
+                pos++;
+            }    
         }
         
         return solInicial;
@@ -116,9 +110,7 @@ private:
         vector<int> solucion(tam);
         for(int i = 0; i < tam; i++){
             solucion[i]=i;
-        }
-        
-        
+        }  
 
         for(int i = 0; i < tam/2; i++){
             // La primera generacion de numeros aleatorios sale generan el mismo
@@ -127,18 +119,46 @@ private:
         } 
         
         // Lectura de la solucion
-        for(int i = 0; i < tam; i++){
-            cout << solucion[i] << "    ";
-        } 
+//        for(int i = 0; i < tam; i++){
+//            cout << solucion[i] << "    ";
+//        } 
         return solucion;
     }
     
-    vector<int> generaSol(vector<int> solInicial){
-        swap(solInicial[Randint(0,solInicial.size()-1)],
-                solInicial[Randint(0,solInicial.size()-1)]);
-        return solInicial;
+    vector<int> generaCambios(int tam){
+        vector<int> cambios(tam,-1);
+        vector<pair<int,int>> solCreadas(NUM_MOV_LOCAL,pair<int,int>(-1,-1));
+        int i = 0;
+        while( i < NUM_MOV_LOCAL){
+            int pos1 = Randint(0,tam-1);
+            int pos2 = Randint(0,tam-1);
+            if(pos1 != pos2){
+                bool esta = false;
+                for(int j = 0; j < solCreadas.size(); j++){
+                    if(solCreadas[j].first != -1){
+                        if(solCreadas[j].first == pos1 && solCreadas[j].second == pos2){
+                            esta = true;
+                        }else if(solCreadas[j].first == pos2 && solCreadas[j].second == pos1){
+                            esta = true;
+                        }
+                    }else{
+                        j = solCreadas.size();
+                    }
+                }
+                if(!esta){
+                    solCreadas.push_back(pair<int,int>(pos1, pos2));
+                    cambios[pos1] = pos2;
+                    i++;
+                }
+            }
+        }
+        return cambios;
     }
     
+    vector<int> intercambia(vector<int> solInicial, int pos1, int pos2){
+        swap(solInicial[pos1],solInicial[pos2]);
+        return solInicial;
+    }
 };
 
 #endif /* ALGORITMOS_H */

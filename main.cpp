@@ -24,6 +24,7 @@ struct Aeropuerto{
     vector<vector<int>> flujo;
     vector<vector<int>> distancia;
     bool simetrica;
+    int coste;
     vector<int> sol;
 };
 
@@ -63,7 +64,9 @@ int main(int argc, char** argv) {
         
         a[i].sol = alg.greedy(a[i].flujo, a[i].distancia);
         //Mostrar datos
-        //alg.mostrarGreedy(a[i].sol);
+        alg.mostrarGreedy(a[i].sol);
+        a[i].coste = alg.coste(a[i].sol, a[i].flujo, a[i].distancia);
+        cout << "El coste para esa solucion es : " << a[i].coste << "\n";
     }
     
     // Prueba Local del mejor
