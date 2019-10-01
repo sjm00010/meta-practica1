@@ -19,18 +19,7 @@ using namespace std;
 
 class Algoritmos {
 public:
-    int coste (vector<int> sol, vector<vector<int>>& flu, vector<vector<int>>& dis){
-        int coste = 0;
-        for (int i = 0; i < flu.size(); i++){
-            for(int j = 0; j < flu.size(); j++){
-                if(i != j){
-                    coste = flu[i][j]*dis[sol[i]][sol[j]];
-                }
-            }
-        }
-        return coste;
-    }
-    
+   
     vector<int> greedy(vector<vector<int>>& flu, vector<vector<int>>& dis){
         vector<int> solFlu(flu.size());
         vector<int> solDis(dis.size());
@@ -53,10 +42,16 @@ public:
         return solucion;
     }
     
-    void mostrarGreedy(vector<int>& v){
-        for(int i = 0; i < v.size(); i++){
-            cout << " (" << (i+1) << ") - " << v[i]+1 << "\n";
+    void mostrarResultado(vector<int>& v, double t, vector<vector<int>>& flu, vector<vector<int>>& dis){
+        for(int i = 1; i < v.size(); i++){
+            printf(" (%2d) -%3d  ",i, v[i-1]+1);
+            if (i % 5 == 0 && i > 0 && i != v.size()-1){
+                cout << "\n";
+            }
         } 
+        cout << "\n\n";
+        cout << "   El coste de la solucion es : " << coste(v, flu, dis) << "\n";
+        cout << "   Tiempo empleado : " << t << "\n";
     }
     
     vector<int> localMejor(vector<vector<int>>& flu, vector<vector<int>>& dis){
@@ -158,6 +153,18 @@ private:
     vector<int> intercambia(vector<int> solInicial, int pos1, int pos2){
         swap(solInicial[pos1],solInicial[pos2]);
         return solInicial;
+    }
+    
+    int coste (vector<int> sol, vector<vector<int>>& flu, vector<vector<int>>& dis){
+        int coste = 0;
+        for (int i = 0; i < flu.size(); i++){
+            for(int j = 0; j < flu.size(); j++){
+                if(i != j){
+                    coste += flu[i][j]*dis[sol[i]][sol[j]];
+                }
+            }
+        }
+        return coste;
     }
 };
 

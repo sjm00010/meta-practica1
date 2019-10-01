@@ -24,7 +24,6 @@ struct Aeropuerto{
     vector<vector<int>> flujo;
     vector<vector<int>> distancia;
     bool simetrica;
-    int coste;
     vector<int> sol;
 };
 
@@ -44,29 +43,28 @@ int main(int argc, char** argv) {
     for(int i = 0; i < archivos.size(); i++){
         string ruta = nombreCarpeta + archivos[i];
         a[i].nombre = archivos[i];
-        cout << "-------------------------------------------------\n";
+        a[i].simetrica = (i<4);
+        cout << "\n-------------------------------------------------\n";
         cout << "       CARGA DE : "+ a[i].nombre +"\n";
         cout << "-------------------------------------------------\n";
-        carga.carga(ruta, a[i].flujo, a[i].distancia);
-        //Mostrar datos
-        //carga.mostrarMatrices(a[i].flujo,a[i].distancia,a[i].tama);
-        a[i].simetrica = (i<4);
-        cout << "\n";
+        carga.carga(ruta, a[i].flujo, a[i].distancia, a[i].simetrica);
+        cout << " Carga completada con exito.\n";
     }
     
     Algoritmos alg;
     
     // Prueba greedy
     for(int i = 0; i < archivos.size(); i++){
-        cout << "-------------------------------------------------\n";
+        cout << "\n-------------------------------------------------\n";
         cout << "   SOLUCION GREEDY PARA : "+ a[i].nombre +"\n";
         cout << "-------------------------------------------------\n";
         
+        //start_timers();
         a[i].sol = alg.greedy(a[i].flujo, a[i].distancia);
+        double tiempo = 0;
+        //elapsed_time();
         //Mostrar datos
-        alg.mostrarGreedy(a[i].sol);
-        a[i].coste = alg.coste(a[i].sol, a[i].flujo, a[i].distancia);
-        cout << "El coste para esa solucion es : " << a[i].coste << "\n";
+        alg.mostrarResultado(a[i].sol, tiempo, a[i].flujo, a[i].distancia);
     }
     
     // Prueba Local del mejor
