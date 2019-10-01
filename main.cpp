@@ -59,10 +59,15 @@ int main(int argc, char** argv) {
         cout << "   SOLUCION GREEDY PARA : "+ a[i].nombre +"\n";
         cout << "-------------------------------------------------\n";
         
-        //start_timers();
+        // Inicio del contador
+        clock_t start_time;
+        start_time = clock();
+        
         a[i].sol = alg.greedy(a[i].flujo, a[i].distancia);
-        double tiempo = 0;
-        //elapsed_time();
+        
+        // Fin del contador
+        double tiempo = (clock()- start_time)/ CLOCKS_PER_SEC;
+        
         //Mostrar datos
         alg.mostrarResultado(a[i].sol, tiempo, a[i].flujo, a[i].distancia);
     }
@@ -72,7 +77,7 @@ int main(int argc, char** argv) {
         cout << "-------------------------------------------------\n";
         cout << "   SOLUCION LOCAL MEJOR PARA : "+ a[i].nombre +"\n";
         cout << "-------------------------------------------------\n";
-        alg.localMejor(a[i].flujo, a[i].distancia);
+        alg.calculaBLocal(a[i].flujo, a[i].distancia);
     }
     
     return 0;

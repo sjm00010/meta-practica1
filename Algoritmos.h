@@ -50,29 +50,15 @@ public:
             }
         } 
         cout << "\n\n";
-        cout << "   El coste de la solucion es : " << coste(v, flu, dis) << "\n";
+        cout << "   El coste de la solucion es : " << calculaCoste(v, flu, dis) << "\n";
         cout << "   Tiempo empleado : " << t << "\n";
     }
     
-    vector<int> localMejor(vector<vector<int>>& flu, vector<vector<int>>& dis){
+    vector<int> calculaBLocal(vector<vector<int>>& flu, vector<vector<int>>& dis){
         vector<int> solInicial(flu.size());
         solInicial = creaSolucion(flu.size());
-        
-        vector< vector<int>> solCandidatas(NUM_MOV_LOCAL);
-        //Creo posibles movimientos
+        vector<int> solCandidata(flu.size());
         int intentos = 0;
-        int pos = 0;
-        vector<int> cambios(flu.size()); 
-        cambios = generaCambios(solInicial.size());
-        for(int i = 0; i < cambios.size(); i++){
-            if(cambios[i] != -1){
-                solCandidatas[pos] = intercambia(solInicial, i, cambios[i]);
-                pos++;
-            }    
-        }
-        
-        return solInicial;
-        
     }
     
 private:
@@ -155,7 +141,7 @@ private:
         return solInicial;
     }
     
-    int coste (vector<int> sol, vector<vector<int>>& flu, vector<vector<int>>& dis){
+    int calculaCoste (vector<int> sol, vector<vector<int>>& flu, vector<vector<int>>& dis){
         int coste = 0;
         for (int i = 0; i < flu.size(); i++){
             for(int j = 0; j < flu.size(); j++){
@@ -165,6 +151,34 @@ private:
             }
         }
         return coste;
+    }
+    
+    vector<int> BLocal(vector<int> solInicial, vector<vector<int>>& flu, vector<vector<int>>& dis){
+        
+        vector< vector<int>> solCandidatas(NUM_MOV_LOCAL);
+        pair<int, int> mejorCoste;
+        
+        int pos = 0;
+        mejorCoste.first = calculaCoste(solInicial, flu, dis);
+        mejorCoste.second = -1;
+        vector<int> cambios(flu.size()); 
+        cambios = generaCambios(solInicial.size());
+        for(int i = 0; i < cambios.size(); i++){
+            if(cambios[i] != -1){
+                solCandidatas[pos] = intercambia(solInicial, i, cambios[i]);
+                int costeActual = calculaCoste(solCandidatas[pos], flu, dis);
+                if(costeActual < mejorCoste.first){
+                    mejorCoste.first = costeActual;
+                    mejorCoste.second = pos;
+                }
+                pos++;
+            }    
+        }
+        if(mejorCoste.second == -1){
+            return solInicial;
+        }else{
+            return solCandidatas[mejorCoste.second]; 
+        }
     }
 };
 
