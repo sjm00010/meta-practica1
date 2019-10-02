@@ -8,6 +8,8 @@
 #include "CargarFichero.h"
 #include "Algoritmos.h"
 #include "timer.h"
+#include "random.h"
+#include "Parametros.h"
 
 
 #include <iostream>
@@ -28,12 +30,9 @@ struct Aeropuerto{
 };
 
 int main(int argc, char** argv) {
-    // Variables de archivos
-    string nombreCarpeta = "./_data/";
-    vector<string> archivos = {
-        "madrid01.dat", "madrid02.dat", "madrid03.dat", "madrid04.dat",
-        "malaga01.dat", "malaga02.dat", "malaga03.dat", "malaga04.dat",
-    };
+    // Variables locales
+    double tiempo = 0;
+
     Set_random(DNI);
     
     vector<Aeropuerto> a(archivos.size());
@@ -60,13 +59,17 @@ int main(int argc, char** argv) {
         cout << "-------------------------------------------------\n";
         
         // Inicio del contador
-        clock_t start_time;
-        start_time = clock();
+        //start_timers();
         
         a[i].sol = alg.greedy(a[i].flujo, a[i].distancia);
         
         // Fin del contador
-        double tiempo = (clock()- start_time)/ CLOCKS_PER_SEC;
+        //tiempo = elapsed_time();
+        
+        
+        // Escribir soluciones en fichero .log
+        carga.registraLogAlg("GREEDY", a[i].nombre);
+        carga.registraLogDatos(a[i].sol, alg.calculaCoste(a[i].sol, a[i].flujo, a[i].distancia));
         
         //Mostrar datos
         alg.mostrarResultado(a[i].sol, tiempo, a[i].flujo, a[i].distancia);
@@ -77,7 +80,8 @@ int main(int argc, char** argv) {
         cout << "-------------------------------------------------\n";
         cout << "   SOLUCION LOCAL MEJOR PARA : "+ a[i].nombre +"\n";
         cout << "-------------------------------------------------\n";
-        alg.calculaBLocal(a[i].flujo, a[i].distancia);
+        carga.registraLogAlg("LOCAL MEJOR", a[i].nombre);
+        alg.bLocalMejor(carga, a[i].flujo, a[i].distancia);
     }
     
     return 0;
