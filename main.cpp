@@ -30,10 +30,7 @@ struct Aeropuerto{
 int main(int argc, char** argv) {
     // Variables locales
     double tiempo = 0;
-
-    Set_random(DNI);
-    
-    Aeropuerto a;
+    Aeropuerto a; // Estructura que almacena las soluciones
     
     // Prueba
     CargarFichero carga;
@@ -44,39 +41,35 @@ int main(int argc, char** argv) {
     carga.carga(ruta, a.flujo, a.distancia, a.simetrica);
     cout << " Carga completada con exito.\n";
     
+    Set_random(DNI);
+    
     Algoritmos alg;
     
     // Prueba greedy
-    for(int i = 0; i < archivos.size(); i++){
         cout << "\n-------------------------------------------------\n";
-        cout << "   SOLUCION GREEDY PARA : "+ a[i].nombre +"\n";
+        cout << "   SOLUCION GREEDY PARA : "+ nombreArchivo +"\n";
         cout << "-------------------------------------------------\n";
         
         // Inicio del contador
         //start_timers();
         
-        a[i].sol = alg.greedy(a[i].flujo, a[i].distancia);
+        a.sol = alg.greedy(a.flujo, a.distancia);
         
         // Fin del contador
         //tiempo = elapsed_time();
         
         
         // Escribir soluciones en fichero .log
-        carga.registraLogAlg("GREEDY", a[i].nombre);
-        carga.registraLogDatos(a[i].sol, alg.calculaCoste(a[i].sol, a[i].flujo, a[i].distancia));
+        //carga.registraLogDatos(a.sol, alg.calculaCoste(a.sol, a.flujo, a.distancia));
         
         //Mostrar datos
-        alg.mostrarResultado(a[i].sol, tiempo, a[i].flujo, a[i].distancia);
-    }
+        alg.mostrarResultado(a.sol, tiempo, a.flujo, a.distancia);
     
     // Prueba Local del mejor
-    for(int i=0; i < archivos.size(); i++){
         cout << "-------------------------------------------------\n";
-        cout << "   SOLUCION LOCAL MEJOR PARA : "+ a[i].nombre +"\n";
+        cout << "   SOLUCION LOCAL MEJOR PARA : "+ nombreArchivo +"\n";
         cout << "-------------------------------------------------\n";
-        carga.registraLogAlg("LOCAL MEJOR", a[i].nombre);
-        alg.bLocalMejor(carga, a[i].flujo, a[i].distancia);
-    }
+        //alg.bLocalMejor(carga, a.flujo, a.distancia);
     
     return 0;
 }

@@ -20,6 +20,10 @@ using namespace std;
 class CargarFichero {
 public:
     
+    /**
+     * Función para cargar los parametros.
+     * @param nombreArchivo Ruta del archivo con los parametros.
+     */
     void cargaParametros(string nombreArchivo){
         ifstream fe(nombreArchivo); //Creo un flujo de entrada
         if(fe.good()){
@@ -53,7 +57,14 @@ public:
         fe.close();   
     }
     
-    void carga(string& archivo, vector<vector<int>>& flu, vector<vector<int>>& dis, bool sim){
+    /**
+     * Función que carga los datos en las matrices.
+     * @param archivo Ruta del archivo con los datos.
+     * @param flu Matriz de flujos.
+     * @param dis Matriz de distancias.
+     * @param sim Variable que almacena si las matrices son simetricas.
+     */
+    void carga(string& archivo, vector<vector<int>>& flu, vector<vector<int>>& dis, bool& sim){
         ifstream fe(archivo); //Creo un flujo de entrada
 
         if(fe.good()){
@@ -85,10 +96,19 @@ public:
         }
         fe.close();
         
+        // Compruebo las matrices
+        sim = comprueba(flu, dis);
+        
         //Mostrar datos cargados
         //mostrarMatrices(flu, dis); 
     }
     
+    /**
+     * 
+     * @param log
+     * @param v
+     * @param coste
+     */
     void registraLogDatos(string log, vector<int>& v, int coste){
         // Crea un fichero de salida
         ofstream fs;
@@ -114,7 +134,31 @@ public:
 
 private:
     
-    
+    bool comprueba(vector<vector<int>>& flu, vector<vector<int>>& dis){
+        bool cambio = false;
+        bool sime = true;
+        for(int i = 0; i < dis.size(); i++){
+            for(int j = i+1; j < dis.size(); j++){
+                if(dis[i][j] == 0 || dis[j][i] == 0){
+                    cambio = true;
+                }
+                if(dis[i][j] != dis[j][i]){
+                    sime = false;
+                    // Finalizo el bucle
+                    i = dis.size();
+                    j = dis.size();
+                }   
+            }
+        }
+        
+        if(cambio){
+            //Cambio las matrices
+            vector<vector<int>> temp(flu);
+            flu = dis;
+            dis = temp;
+        }
+        return sime;
+    }
     
     void mostrarMatrices( vector<vector<int>>& flu, vector<vector<int>>& dis){
         cout << "--------- MATRIZ DE DISTANCIAS : ----------\n";

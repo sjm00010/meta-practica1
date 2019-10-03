@@ -11,7 +11,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <memory>
+#include <limits>
 #include "random.h"
 #include "CargarFichero.h"
 
@@ -78,7 +78,7 @@ private:
             }
         }
         //cout << "Distancia menor : " << v[pos] << " ("<< pos <<")" <<"\n";
-        v[pos] = INT_MAX; // Marco la posicion como seleccionada
+        v[pos] = std::numeric_limits<int>::max(); // Marco la posicion como seleccionada
         return pos;
         
     }
@@ -86,12 +86,12 @@ private:
     int mayor(vector<int>& v){
         int pos = 0;
         for(int i = 1; i < v.size(); i++){
-            if(v[i] > v[pos] && v[i] != INT_MIN){
+            if(v[i] > v[pos] && v[i] != -1){
                 pos = i;
             }
         }
         //cout << "Flujo mayor : " << v[pos] <<" ("<< pos <<")"<< "     " ;
-        v[pos] = INT_MIN; // Marco la posicion como seleccionada
+        v[pos] = -1; // Marco la posicion como seleccionada
         return pos;
     }
     
