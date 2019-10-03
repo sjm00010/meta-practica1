@@ -48,7 +48,11 @@ public:
         return solucion;
     }
     
-    
+    void regitroLog(CargarFichero log, int intento, vector<int> sol, int coste, double tiempo){
+        string archivo = carpetaLog + "GREEDY-" + to_string(intento) + "_" + nombreArchivo + ".log";
+        log.creaLog(archivo);
+        log.registraLogDatos(archivo, sol, coste);
+    }
 
 
 private:

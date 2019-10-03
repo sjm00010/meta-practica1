@@ -10,6 +10,7 @@
 #include "random.h"
 #include "Parametros.h"
 #include "BLocalMejor.h"
+#include "Timer.h"
 
 
 #include <iostream>
@@ -30,8 +31,8 @@ struct Aeropuerto{
 
 int main(int argc, char** argv) {
     // Variables locales
-    double tiempo = 0;
     Aeropuerto a; // Estructura que almacena las soluciones
+    Timer crono;
     
     // Cargar de datos
     CargarFichero carga;
@@ -47,6 +48,7 @@ int main(int argc, char** argv) {
     Set_random(DNI);
    
     
+    //cout << numDigitos(DNI);
     
     // Prueba greedy
     Greedy alg;
@@ -55,13 +57,12 @@ int main(int argc, char** argv) {
     cout << "-------------------------------------------------\n";
 
     // Inicio del contador
-    //start_timers();
+    crono.start();
 
     a.sol = alg.greedy(a.flujo, a.distancia);
 
     // Fin del contador
-    //tiempo = elapsed_time();
-
+    crono.stop();
 
     // Escribir soluciones en fichero .log
     //carga.registraLogDatos(a.sol, alg.calculaCoste(a.sol, a.flujo, a.distancia));

@@ -62,6 +62,10 @@ public:
                         fe >> carpetaLog;
                         //cout << carpetaLog << endl;
                         break;
+                    case 7:
+                        fe >> NUM_PRUEBAS;
+                        //cout << carpetaLog << endl;
+                        break;
                 }
             }
         }
@@ -135,6 +139,17 @@ public:
         fs.close();
     }
 
+    /**
+     * Función que crea el archivo .log
+     * @param nombre Nombre del archivo
+     */
+    void creaLog(string nombre){
+        // Crea un fichero de salida
+        //string nombre = nombreArchivo + "-" + alg + ".log";
+        ofstream fs(nombre); 
+        fs.close();
+    }
+    
 private:
     
     /**
@@ -193,17 +208,6 @@ private:
             cout << "\n";
         }
         cout << "\n";
-    }
-    
-    /**
-     * Función que crea el archivo .log
-     * @param nombre Nombre del archivo
-     */
-    void creaLog(string nombre){
-        // Crea un fichero de salida
-        //string nombre = nombreArchivo + "-" + alg + ".log";
-        ofstream fs(nombre); 
-        fs.close();
     }
 };
 

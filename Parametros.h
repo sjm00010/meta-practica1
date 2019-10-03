@@ -10,22 +10,24 @@
 
 #include <string>
 #include <vector>
+#include <cmath>
 
 using namespace std;
     
     string rutaParam = "parametros.txt";
-    int numParam = 7; 
+    int numParam = 8; 
 
     int DNI;
     int NUM_SOLU_LOCAL;
     int MAX_INTENTOS_LOCAL;
     int LIM_EVA_LOCAL;
+    int NUM_PRUEBAS;
     
     string carpetaDatos;
     string nombreArchivo;
     string carpetaLog;
     
-    
+// Funciones generales 
     
     /**
      * Función que calcula el coste de una solción.
@@ -63,6 +65,10 @@ using namespace std;
         cout << "\n\n";
         cout << "   El coste de la solucion es : " << calculaCoste(v, flu, dis) << "\n";
         cout << "   Tiempo empleado : " << t << "\n";
+    }
+    
+    unsigned numDigitos (unsigned i){
+        return i > 0 ? (int) log10 ((double) i) + 1 : 1;
     }
 #endif /* PARAMETROS_H */
 
