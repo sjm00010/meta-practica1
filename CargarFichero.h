@@ -35,28 +35,32 @@ public:
 
                 switch(i){
                     case 0:
-                        fe >> nombreCarpeta;
-                        cout << nombreCarpeta << endl;
+                        fe >> carpetaDatos;
+                        //cout << carpetaDatos << endl;
                         break;
                     case 1:
                         fe >> nombreArchivo;
-                        cout << nombreArchivo << endl;
+                        //cout << nombreArchivo << endl;
                         break;
                     case 2:
                         fe >> DNI;
-                        cout << DNI << endl;
+                        //cout << DNI << endl;
                         break;
                     case 3:
                         fe >> NUM_SOLU_LOCAL;
-                        cout << NUM_SOLU_LOCAL << endl;
+                        //cout << NUM_SOLU_LOCAL << endl;
                         break;
                     case 4:
                         fe >> MAX_INTENTOS_LOCAL;
-                        cout << MAX_INTENTOS_LOCAL << endl;
+                        //cout << MAX_INTENTOS_LOCAL << endl;
                         break;
                     case 5:
                         fe >> LIM_EVA_LOCAL;
-                        cout << LIM_EVA_LOCAL << endl;
+                        //cout << LIM_EVA_LOCAL << endl;
+                        break;
+                    case 6:
+                        fe >> carpetaLog;
+                        //cout << carpetaLog << endl;
                         break;
                 }
             }

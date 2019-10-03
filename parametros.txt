@@ -4,3 +4,4 @@ dni = 26515294
 num_soluciones = 10
 intentos_posibles = 100
 evaluzaciones_totales = 50000
+carpeta_logs = ./_logs/

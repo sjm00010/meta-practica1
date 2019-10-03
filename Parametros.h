@@ -14,15 +14,16 @@
 using namespace std;
     
     string rutaParam = "parametros.txt";
-    int numParam = 6; 
+    int numParam = 7; 
 
     int DNI;
     int NUM_SOLU_LOCAL;
     int MAX_INTENTOS_LOCAL;
     int LIM_EVA_LOCAL;
     
-    string nombreCarpeta;
+    string carpetaDatos;
     string nombreArchivo;
+    string carpetaLog;
     
     
     

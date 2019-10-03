@@ -64,6 +64,16 @@ public:
     
 private:
     
+    /**
+     * Funcion que calcula el coste para el intercambio de dos soluciones
+     * @param costeViejo
+     * @param pos1
+     * @param pos2
+     * @param sol
+     * @param flu
+     * @param dis
+     * @return 
+     */
     int calculaCoste2(int costeViejo, int pos1, int pos2 ,vector<int> sol, vector<vector<int>>& flu, vector<vector<int>>& dis){
         
         for(int i = 0; i < sol.size(); i++){

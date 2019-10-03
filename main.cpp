@@ -36,12 +36,13 @@ int main(int argc, char** argv) {
     // Cargar de datos
     CargarFichero carga;
     carga.cargaParametros();
-    string ruta = nombreCarpeta + nombreArchivo;
+    string ruta = carpetaDatos + nombreArchivo;
     cout << "\n-------------------------------------------------\n";
     cout << "       CARGA DE : "+ nombreArchivo +"\n";
     cout << "-------------------------------------------------\n";
     carga.carga(ruta, a.flujo, a.distancia, a.simetrica);
     cout << " Carga completada con exito.\n";
+    
     
     Set_random(DNI);
    
