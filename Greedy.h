@@ -5,8 +5,8 @@
  * Created on 26 de septiembre de 2019, 19:09
  */
 
-#ifndef ALGORITMOS_H
-#define ALGORITMOS_H
+#ifndef GREEDY_H
+#define GREEDY_H
 
 #include <iostream>
 #include <string>
@@ -17,9 +17,15 @@
 
 using namespace std;
 
-class Algoritmos {
+class Greedy {
 public:
-   
+    
+    /**
+     * Algoritmo Greedy
+     * @param flu Matriz de flujos
+     * @param dis MAtriz de distancias
+     * @return Devuelve un vector con las soluciones.
+     */
     vector<int> greedy(vector<vector<int>>& flu, vector<vector<int>>& dis){
         vector<int> solFlu(flu.size());
         vector<int> solDis(dis.size());
@@ -42,6 +48,13 @@ public:
         return solucion;
     }
     
+    /**
+     * Función que calcula el coste de una solción.
+     * @param sol Vector con la solución.
+     * @param flu Matriz de flujos.
+     * @param dis Matriz de distancias.
+     * @return Devuelve el coste calculado.
+     */
     int calculaCoste (vector<int> sol, vector<vector<int>>& flu, vector<vector<int>>& dis){
         int coste = 0;
         for (int i = 0; i < flu.size(); i++){
@@ -54,6 +67,13 @@ public:
         return coste;
     }
     
+    /**
+     * Función que muestra por consola la solción calculada.
+     * @param v Vector con la solución.
+     * @param t Tiempo que tarda el algoritmo.
+     * @param flu Matriz de flujos
+     * @param dis Matriz de distancias
+     */
     void mostrarResultado( vector<int>& v, double t, vector<vector<int>>& flu, vector<vector<int>>& dis){
         for(int i = 1; i < v.size(); i++){
             printf(" (%2d) -%3d  ",i, v[i-1]+1);
@@ -65,11 +85,13 @@ public:
         cout << "   El coste de la solucion es : " << calculaCoste(v, flu, dis) << "\n";
         cout << "   Tiempo empleado : " << t << "\n";
     }
-    
-    
-    
-    
+
 private:
+    /**
+     * Función que busca el menor de un vector y devuelve su posición.
+     * @param v Vector de busqueda
+     * @return  Posición del dato menor
+     */
     int menor(vector<int>& v){
         int pos = 0;
         for(int i = 0; i < v.size(); i++){
@@ -83,6 +105,11 @@ private:
         
     }
     
+    /**
+     * Función que busca el mayor de un vector y devuelve su posición.
+     * @param v Vector de busqueda
+     * @return Posición del mayor
+     */
     int mayor(vector<int>& v){
         int pos = 0;
         for(int i = 1; i < v.size(); i++){
@@ -94,13 +121,8 @@ private:
         v[pos] = -1; // Marco la posicion como seleccionada
         return pos;
     }
-    
-    vector<int> intercambia(vector<int> solInicial, int pos1, int pos2){
-        swap(solInicial[pos1],solInicial[pos2]);
-        return solInicial;
-    }
 
 };
 
-#endif /* ALGORITMOS_H */
+#endif /* GREEDY_H */
 

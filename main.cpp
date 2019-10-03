@@ -6,7 +6,7 @@
  */
 
 #include "CargarFichero.h"
-#include "Algoritmos.h"
+#include "Greedy.h"
 #include "random.h"
 #include "Parametros.h"
 
@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
     double tiempo = 0;
     Aeropuerto a; // Estructura que almacena las soluciones
     
-    // Prueba
+    // Cargar de datos
     CargarFichero carga;
     string ruta = nombreCarpeta + nombreArchivo;
     cout << "\n-------------------------------------------------\n";
@@ -43,7 +43,23 @@ int main(int argc, char** argv) {
     
     Set_random(DNI);
     
-    Algoritmos alg;
+    int opcion = 0;
+    cout << "\n¿ Que algoritmo deseas aplicar?" << endl;
+    cout << "1. Greedy" << endl;
+    cout << "2. Busqueda Local del Mejor" << endl;
+    cout << "3. Busqueda Tabu" << endl;
+    cout << "4. Salir" << endl;
+    cin >> opcion;
+    
+    switch(opcion){
+        case 1:
+            
+    }
+    
+    // Prueba
+
+    
+    Greedy alg;
     
     // Prueba greedy
         cout << "\n-------------------------------------------------\n";

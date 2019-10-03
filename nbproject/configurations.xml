@@ -4,9 +4,9 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>Algoritmos.h</itemPath>
       <itemPath>BLocalMejor.h</itemPath>
       <itemPath>CargarFichero.h</itemPath>
+      <itemPath>Greedy.h</itemPath>
       <itemPath>Parametros.h</itemPath>
       <itemPath>random.h</itemPath>
     </logicalFolder>
@@ -45,11 +45,11 @@
           <standard>8</standard>
         </ccTool>
       </compileType>
-      <item path="Algoritmos.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="BLocalMejor.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="CargarFichero.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Greedy.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Parametros.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -80,11 +80,11 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="Algoritmos.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="BLocalMejor.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="CargarFichero.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Greedy.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Parametros.h" ex="false" tool="3" flavor2="0">
       </item>

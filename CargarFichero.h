@@ -104,10 +104,10 @@ public:
     }
     
     /**
-     * 
-     * @param log
-     * @param v
-     * @param coste
+     * Función que registra la solución con su coste
+     * @param log Nombre del archivo .log
+     * @param v Vector solución
+     * @param coste Coste de la solución
      */
     void registraLogDatos(string log, vector<int>& v, int coste){
         // Crea un fichero de salida
@@ -123,17 +123,15 @@ public:
         fs << "\n";
         fs.close();
     }
-    
-    void registraLogCadena(string cadena,string log){
-        // Crea un fichero de salida
-        ofstream fs;
-        fs.open(log, std::ios_base::app);
-        fs << cadena << "\n";
-        fs.close();
-    }
 
 private:
     
+    /**
+     * Función que comprueba tanto a simetria como la correcta atribución de las matrices
+     * @param flu Matriz de flujos
+     * @param dis Matriz de distancias
+     * @return True si es simétrica, False si no lo es.
+     */
     bool comprueba(vector<vector<int>>& flu, vector<vector<int>>& dis){
         bool cambio = false;
         bool sime = true;
@@ -160,6 +158,11 @@ private:
         return sime;
     }
     
+    /**
+     * Función que muestra por consola las matrices
+     * @param flu Matriz de flujos
+     * @param dis Matriz de distancias
+     */
     void mostrarMatrices( vector<vector<int>>& flu, vector<vector<int>>& dis){
         cout << "--------- MATRIZ DE DISTANCIAS : ----------\n";
         for(int i = 0; i < dis.size(); i++){
@@ -181,6 +184,10 @@ private:
         cout << "\n";
     }
     
+    /**
+     * Función que crea el archivo .log
+     * @param nombre Nombre del archivo
+     */
     void creaLog(string nombre){
         // Crea un fichero de salida
         //string nombre = nombreArchivo + "-" + alg + ".log";
