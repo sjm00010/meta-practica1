@@ -24,32 +24,39 @@ public:
      * Función para cargar los parametros.
      * @param nombreArchivo Ruta del archivo con los parametros.
      */
-    void cargaParametros(string nombreArchivo){
-        ifstream fe(nombreArchivo); //Creo un flujo de entrada
+    void cargaParametros(){
+        ifstream fe(rutaParam); //Creo un flujo de entrada
         if(fe.good()){
             for(int i = 0; i < numParam; i++){
                 // Quito el nombre de los parametros y el =
-                fe >> ws;
-                fe >> ws;
+                string basura;
+                fe >> basura;
+                fe >> basura;
 
                 switch(i){
                     case 0:
                         fe >> nombreCarpeta;
+                        cout << nombreCarpeta << endl;
                         break;
                     case 1:
                         fe >> nombreArchivo;
+                        cout << nombreArchivo << endl;
                         break;
                     case 2:
                         fe >> DNI;
+                        cout << DNI << endl;
                         break;
                     case 3:
                         fe >> NUM_SOLU_LOCAL;
+                        cout << NUM_SOLU_LOCAL << endl;
                         break;
                     case 4:
                         fe >> MAX_INTENTOS_LOCAL;
+                        cout << MAX_INTENTOS_LOCAL << endl;
                         break;
                     case 5:
                         fe >> LIM_EVA_LOCAL;
+                        cout << LIM_EVA_LOCAL << endl;
                         break;
                 }
             }
