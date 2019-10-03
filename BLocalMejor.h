@@ -35,7 +35,6 @@ public:
         vector<int> solActual(flu.size());
         solActual = creaSolucion(flu.size());
         int costeAc = calculaCoste(solActual, flu, dis, sim);
-        cout << costeAc << endl;
         //log.registraLogDatos(solActual, costeAc);
                 
         int k = 0; // Limite de 50000 evaluaciones
@@ -47,7 +46,7 @@ public:
                 intentos = 0;
                 
                 // Prueba
-                cout << costeAc << " -- " << calculaCoste(solActual, flu, dis, sim) << endl;
+                //cout << costeAc << " -- " << calculaCoste(solActual, flu, dis, sim) << endl;
                 
                 // escribo en el flichero la solucion encontrada
                 //log.registraLogDatos(solActual, costeAc);
