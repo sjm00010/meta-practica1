@@ -5,10 +5,10 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>Algoritmos.h</itemPath>
+      <itemPath>BLocalMejor.h</itemPath>
       <itemPath>CargarFichero.h</itemPath>
       <itemPath>Parametros.h</itemPath>
       <itemPath>random.h</itemPath>
-      <itemPath>timer.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -19,7 +19,6 @@
                    projectFiles="true">
       <itemPath>main.cpp</itemPath>
       <itemPath>random.cpp</itemPath>
-      <itemPath>timer.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -48,6 +47,8 @@
       </compileType>
       <item path="Algoritmos.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="BLocalMejor.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="CargarFichero.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Parametros.h" ex="false" tool="3" flavor2="0">
@@ -57,10 +58,6 @@
       <item path="random.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="random.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="timer.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="timer.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -85,6 +82,8 @@
       </compileType>
       <item path="Algoritmos.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="BLocalMejor.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="CargarFichero.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Parametros.h" ex="false" tool="3" flavor2="0">
@@ -94,10 +93,6 @@
       <item path="random.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="random.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="timer.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="timer.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

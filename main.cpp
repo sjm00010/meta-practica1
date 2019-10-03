@@ -7,7 +7,6 @@
 
 #include "CargarFichero.h"
 #include "Algoritmos.h"
-#include "timer.h"
 #include "random.h"
 #include "Parametros.h"
 
@@ -22,7 +21,6 @@ using namespace std;
  * 
  */
 struct Aeropuerto{
-    string nombre;
     vector<vector<int>> flujo;
     vector<vector<int>> distancia;
     bool simetrica;
@@ -35,20 +33,16 @@ int main(int argc, char** argv) {
 
     Set_random(DNI);
     
-    vector<Aeropuerto> a(archivos.size());
+    Aeropuerto a;
     
     // Prueba
     CargarFichero carga;
-    for(int i = 0; i < archivos.size(); i++){
-        string ruta = nombreCarpeta + archivos[i];
-        a[i].nombre = archivos[i];
-        a[i].simetrica = (i<4);
-        cout << "\n-------------------------------------------------\n";
-        cout << "       CARGA DE : "+ a[i].nombre +"\n";
-        cout << "-------------------------------------------------\n";
-        carga.carga(ruta, a[i].flujo, a[i].distancia, a[i].simetrica);
-        cout << " Carga completada con exito.\n";
-    }
+    string ruta = nombreCarpeta + nombreArchivo;
+    cout << "\n-------------------------------------------------\n";
+    cout << "       CARGA DE : "+ nombreArchivo +"\n";
+    cout << "-------------------------------------------------\n";
+    carga.carga(ruta, a.flujo, a.distancia, a.simetrica);
+    cout << " Carga completada con exito.\n";
     
     Algoritmos alg;
     

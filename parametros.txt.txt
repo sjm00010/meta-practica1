@@ -1,0 +1,6 @@
+carpeta_datos = ./_data/
+input = madrid01.dat
+dni = 26515294
+num_soluciones = 10
+intentos_posibles = 100
+evaluzaciones_totales = 50000

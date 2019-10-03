@@ -11,18 +11,15 @@
 #include <string>
 #include <vector>
 
-    int INT_MAX = +2147483647;
-    int INT_MIN = -2147483648;
-    int DNI = 26515294;
-    int NUM_MOV_LOCAL = 10;
-    int MAX_INTENTOS = 100;
-    int LIM_EVA_LOCAL = 50000;
+    int numParam = 6; 
+
+    int DNI;
+    int NUM_SOLU_LOCAL;
+    int MAX_INTENTOS_LOCAL;
+    int LIM_EVA_LOCAL;
     
-    std::string log = "resultados.log";
-    std::string nombreCarpeta = "./_data/";
-    std::vector<std::string> archivos = {
-        "madrid01.dat", "madrid02.dat", "madrid03.dat", "madrid04.dat",
-        "malaga01.dat", "malaga02.dat", "malaga03.dat", "malaga04.dat",
-    };
+    std::string nombreCarpeta;
+    std::string nombreArchivo;
+    
 #endif /* PARAMETROS_H */
 

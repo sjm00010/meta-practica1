@@ -20,6 +20,39 @@ using namespace std;
 class CargarFichero {
 public:
     
+    void cargaParametros(string nombreArchivo){
+        ifstream fe(nombreArchivo); //Creo un flujo de entrada
+        if(fe.good()){
+            for(int i = 0; i < numParam; i++){
+                // Quito el nombre de los parametros y el =
+                fe >> ws;
+                fe >> ws;
+
+                switch(i){
+                    case 0:
+                        fe >> nombreCarpeta;
+                        break;
+                    case 1:
+                        fe >> nombreArchivo;
+                        break;
+                    case 2:
+                        fe >> DNI;
+                        break;
+                    case 3:
+                        fe >> NUM_SOLU_LOCAL;
+                        break;
+                    case 4:
+                        fe >> MAX_INTENTOS_LOCAL;
+                        break;
+                    case 5:
+                        fe >> LIM_EVA_LOCAL;
+                        break;
+                }
+            }
+        }
+        fe.close();   
+    }
+    
     void carga(string& archivo, vector<vector<int>>& flu, vector<vector<int>>& dis, bool sim){
         ifstream fe(archivo); //Creo un flujo de entrada
 
@@ -35,47 +68,28 @@ public:
                 dis[i].resize(tam);
             }
             
-            if(sim){
-                // Leo los datos del fichero y los asigno a la matriz
-                for(int i = 0; i < tam; i++){
-                    for(int j = 0; j< tam; j++){
-                        fe >> dis[i][j];
-                    }
+            // Leo los datos del fichero y los asigno a la matriz
+            for(int i = 0; i < tam; i++){
+                for(int j = 0; j< tam; j++){
+                    fe >> dis[i][j];
                 }
-
-                fe >> ws; //getline(cin, ws);
-
-                for(int i = 0; i < tam; i++){
-                    for(int j = 0; j< tam; j++){
-                        fe >> flu[i][j];
-                    }
-                }
-            }else{
-                // Leo los datos del fichero y los asigno a la matriz
-                for(int i = 0; i < tam; i++){
-                    for(int j = 0; j< tam; j++){
-                        fe >> flu[i][j];
-                    }
-                }
-
-                fe >> ws; //getline(cin, ws);
-
-                for(int i = 0; i < tam; i++){
-                    for(int j = 0; j< tam; j++){
-                        fe >> dis[i][j];
-                    }
-                } 
             }
 
+            fe >> ws; //getline(cin, ws);
+
+            for(int i = 0; i < tam; i++){
+                for(int j = 0; j< tam; j++){
+                    fe >> flu[i][j];
+                }
+            }
         }
         fe.close();
         
-        creaLog();
         //Mostrar datos cargados
         //mostrarMatrices(flu, dis); 
     }
     
-    void registraLogDatos(vector<int>& v, int coste){
+    void registraLogDatos(string log, vector<int>& v, int coste){
         // Crea un fichero de salida
         ofstream fs;
         fs.open(log, std::ios_base::app);
@@ -89,16 +103,8 @@ public:
         fs << "\n";
         fs.close();
     }
-
-    void registraLogAlg(string nombreAlg, string nombreAr ){
-        // Crea un fichero de salida
-        ofstream fs;
-        fs.open(log, std::ios_base::app);
-        fs << nombreAr << " ( " << nombreAlg << " ) \n";
-        fs.close();
-    }
     
-    void registraLogCadena(string cadena){
+    void registraLogCadena(string cadena,string log){
         // Crea un fichero de salida
         ofstream fs;
         fs.open(log, std::ios_base::app);
@@ -131,9 +137,10 @@ private:
         cout << "\n";
     }
     
-    void creaLog(){
+    void creaLog(string nombre){
         // Crea un fichero de salida
-        ofstream fs(log); 
+        //string nombre = nombreArchivo + "-" + alg + ".log";
+        ofstream fs(nombre); 
         fs.close();
     }
 };
