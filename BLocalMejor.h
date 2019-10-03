@@ -30,11 +30,11 @@ public:
      * @param dis Matriz de distancias
      * @return Devuelve el vector solución
      */
-    vector<int> bLocalMejor(CargarFichero& log, vector<vector<int>>& flu, vector<vector<int>>& dis){
+    vector<int> bLocalMejor(CargarFichero& log, vector<vector<int>>& flu, vector<vector<int>>& dis, bool sim){
         // Creo la solución inicial de partida
         vector<int> solActual(flu.size());
         solActual = creaSolucion(flu.size());
-        int costeAc = calculaCoste(solActual, flu, dis);
+        int costeAc = calculaCoste(solActual, flu, dis, sim);
         cout << costeAc << endl;
         //log.registraLogDatos(solActual, costeAc);
                 
@@ -46,8 +46,10 @@ public:
                 k++;
                 intentos = 0;
                 
+                // Prueba
+                cout << costeAc << " -- " << calculaCoste(solActual, flu, dis, sim) << endl;
+                
                 // escribo en el flichero la solucion encontrada
-                cout << costeAc << " -- " << calculaCoste(solActual, flu, dis) << endl;
                 //log.registraLogDatos(solActual, costeAc);
             }else{
                 intentos++;

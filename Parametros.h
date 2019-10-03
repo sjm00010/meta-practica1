@@ -14,9 +14,11 @@
 
 using namespace std;
     
+    // Parametros necesarios que se necesitan
     string rutaParam = "parametros.txt";
     int numParam = 8; 
 
+    // Parametros a cargar del archivo parametros.txt
     int DNI;
     int NUM_SOLU_LOCAL;
     int MAX_INTENTOS_LOCAL;
@@ -36,15 +38,27 @@ using namespace std;
      * @param dis Matriz de distancias.
      * @return Devuelve el coste calculado.
      */
-    int calculaCoste (vector<int> sol, vector<vector<int>>& flu, vector<vector<int>>& dis){
+    int calculaCoste (vector<int> sol, vector<vector<int>>& flu, vector<vector<int>>& dis, bool sim){
         int coste = 0;
-        for (int i = 0; i < flu.size(); i++){
-            for(int j = 0; j < flu.size(); j++){
-                if(i != j){
-                    coste += flu[i][j]*dis[sol[i]][sol[j]];
+        if(sim){
+            for (int i = 0; i < flu.size(); i++){
+                for(int j = i+1; j < flu.size(); j++){
+                    if(i != j){
+                        coste += flu[i][j]*dis[sol[i]][sol[j]];
+                    }
+                }
+            }
+            coste *= 2;
+        }else{
+            for (int i = 0; i < flu.size(); i++){
+                for(int j = 0; j < flu.size(); j++){
+                    if(i != j){
+                        coste += flu[i][j]*dis[sol[i]][sol[j]];
+                    }
                 }
             }
         }
+        
         return coste;
     }
     
@@ -55,7 +69,7 @@ using namespace std;
      * @param flu Matriz de flujos
      * @param dis Matriz de distancias
      */
-    void mostrarResultado( vector<int>& v, double t, vector<vector<int>>& flu, vector<vector<int>>& dis){
+    void mostrarResultado( vector<int>& v, double t, vector<vector<int>>& flu, vector<vector<int>>& dis, int coste){
         for(int i = 1; i < v.size(); i++){
             printf(" (%2d) -%3d  ",i, v[i-1]+1);
             if (i % 5 == 0 && i > 0 && i != v.size()-1){
@@ -63,10 +77,16 @@ using namespace std;
             }
         } 
         cout << "\n\n";
-        cout << "   El coste de la solucion es : " << calculaCoste(v, flu, dis) << "\n";
-        cout << "   Tiempo empleado : " << t << "\n";
+        cout << "   El coste de la solucion es : " << coste << "\n";
+        cout << "   Tiempo empleado : " << t << " ms\n";
     }
     
+    /**
+     * Función que te dice la cantidad de digitos de un número. 
+     * Auxiliar para rotar los numeros del DNI.
+     * @param i Numero a analizar.
+     * @return Número de digitos.
+     */
     unsigned numDigitos (unsigned i){
         return i > 0 ? (int) log10 ((double) i) + 1 : 1;
     }

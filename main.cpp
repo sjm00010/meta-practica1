@@ -26,13 +26,15 @@ struct Aeropuerto{
     vector<vector<int>> flujo;
     vector<vector<int>> distancia;
     bool simetrica;
-    vector<int> sol;
 };
 
 int main(int argc, char** argv) {
     // Variables locales
     Aeropuerto a; // Estructura que almacena las soluciones
     Timer crono;
+    vector<int> sol;
+    int coste;
+    double tiempo;
     
     // Cargar de datos
     CargarFichero carga;
@@ -50,35 +52,51 @@ int main(int argc, char** argv) {
     
     //cout << numDigitos(DNI);
     
-    // Prueba greedy
-    Greedy alg;
-    cout << "\n-------------------------------------------------\n";
-    cout << "   SOLUCION GREEDY PARA : "+ nombreArchivo +"\n";
-    cout << "-------------------------------------------------\n";
+    for(int i = 1; i <= NUM_PRUEBAS; i++){
+        // Prueba greedy
+        Greedy alg;
+        cout << "\n-------------------------------------------------\n";
+        cout << "   SOLUCION "+ to_string(i) +" GREEDY PARA : "+ nombreArchivo +"\n";
+        cout << "-------------------------------------------------\n";
 
-    // Inicio del contador
-    crono.start();
+        // Inicio del contador
+        crono.start();
 
-    a.sol = alg.greedy(a.flujo, a.distancia);
+        sol = alg.greedy(a.flujo, a.distancia);
 
-    // Fin del contador
-    crono.stop();
+        // Fin del contador
+        crono.stop();
+        
+        // Escribir soluciones en fichero .log
+        coste = calculaCoste(sol, a.flujo, a.distancia, a.simetrica);
+        tiempo = crono.getElapsedTimeInMilliSec();
+        alg.regitroLog(carga, i, sol, coste, tiempo);
 
-    // Escribir soluciones en fichero .log
-    //carga.registraLogDatos(a.sol, alg.calculaCoste(a.sol, a.flujo, a.distancia));
-
-    //Mostrar datos
-    mostrarResultado(a.sol, tiempo, a.flujo, a.distancia);
+        //Mostrar datos
+        mostrarResultado(sol, tiempo, a.flujo, a.distancia, coste);
+    }
     
     // Prueba Local del mejor
-    BLocalMejor blocal;
+    BLocalMejor alg2;
     cout << "-------------------------------------------------\n";
     cout << "   SOLUCION LOCAL MEJOR PARA : "+ nombreArchivo +"\n";
     cout << "-------------------------------------------------\n";
-    a.sol = blocal.bLocalMejor(carga, a.flujo, a.distancia);
+    
+    // Inicio del contador
+    crono.start();
+    
+    sol = alg2.bLocalMejor(carga, a.flujo, a.distancia, a.simetrica);
+    
+    // Fin del contador
+    crono.stop();
+    
+    // Escribir soluciones en fichero .log
+    coste = calculaCoste(sol, a.flujo, a.distancia, a.simetrica);
+    tiempo = crono.getElapsedTimeInMilliSec();
+    //alg2.regitroLog(carga, i, sol, coste, tiempo);
     
     //Mostrar datos
-    mostrarResultado(a.sol, tiempo, a.flujo, a.distancia);
+    mostrarResultado(sol, tiempo, a.flujo, a.distancia, coste);
     
     return 0;
 }

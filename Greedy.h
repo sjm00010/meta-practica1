@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <limits>
+#include <sstream>
 #include "random.h"
 #include "CargarFichero.h"
 
@@ -48,10 +49,19 @@ public:
         return solucion;
     }
     
-    void regitroLog(CargarFichero log, int intento, vector<int> sol, int coste, double tiempo){
-        string archivo = carpetaLog + "GREEDY-" + to_string(intento) + "_" + nombreArchivo + ".log";
-        log.creaLog(archivo);
-        log.registraLogDatos(archivo, sol, coste);
+    /**
+     * Función para registrar los datos en un archivo .log
+     * @param log Objeto para crear el fichero.
+     * @param prueba Número de la prueba por la que va.
+     *              (De las 5 que hay que realizar con el DNI)
+     * @param sol Vector con la solución
+     * @param coste Coste de la solución
+     * @param tiempo Tiempo en calcularla
+     */
+    void regitroLog(CargarFichero log, int prueba, vector<int> sol, int coste, double tiempo){
+        string nombreAr = carpetaLog + "GREEDY-" + to_string(prueba) + "_" + nombreArchivo + ".log";;
+        log.creaLog(nombreAr, prueba);
+        log.registraLogDatos(nombreAr, sol, coste, tiempo);
     }
 
 

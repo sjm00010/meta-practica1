@@ -124,11 +124,11 @@ public:
      * @param v Vector solución
      * @param coste Coste de la solución
      */
-    void registraLogDatos(string log, vector<int>& v, int coste){
+    void registraLogDatos(string log, vector<int>& v, int coste, double t){
         // Crea un fichero de salida
         ofstream fs;
         fs.open(log, std::ios_base::app);
-        fs << coste << " -->    ";
+        fs <<"(" << t <<" ms)\n"<< coste << " -->    ";
         for (int i = 0; i < v.size(); i++) {
             fs << "(" << i+1 <<")->" << v[i] << "   ";
             if( i % 9 == 0 && i > 0){
@@ -138,15 +138,19 @@ public:
         fs << "\n";
         fs.close();
     }
+    
+    
+    void registraMov(string log, int coste, int pos1, int pos2){
+        
+    }
 
     /**
      * Función que crea el archivo .log
      * @param nombre Nombre del archivo
      */
-    void creaLog(string nombre){
+    void creaLog(string nombreAr, int prueba){
         // Crea un fichero de salida
-        //string nombre = nombreArchivo + "-" + alg + ".log";
-        ofstream fs(nombre); 
+        ofstream fs(nombreAr); 
         fs.close();
     }
     
