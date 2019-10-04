@@ -17,6 +17,7 @@
 #include <vector>
 
 #include "Parametros.h"
+#include "CargarFichero.h"
 
 using namespace std;
 
@@ -30,26 +31,21 @@ public:
      * @param dis Matriz de distancias
      * @return Devuelve el vector solución
      */
-    vector<int> bLocalMejor(CargarFichero& log, vector<vector<int>>& flu, vector<vector<int>>& dis, bool sim){
+    vector<int> bLocalMejor(CargarFichero& log,int prueba, vector<vector<int>>& flu, vector<vector<int>>& dis, bool sim){
         // Creo la solución inicial de partida
         vector<int> solActual(flu.size());
         solActual = creaSolucion(flu.size());
         int costeAc = calculaCoste(solActual, flu, dis, sim);
-        //log.registraLogDatos(solActual, costeAc);
+        creaLog(log, prueba);
+        log.registraLogDatos(rutaLog ,solActual, costeAc);
                 
         int k = 0; // Limite de 50000 evaluaciones
         int intentos = 0; // Limite de 100 intentos
         while( k < LIM_EVA_LOCAL){
             // Busco 10 vecinos 
-            if(generaCambios(costeAc, solActual, flu, dis)){
+            if(generaCambios(log, costeAc, solActual, flu, dis)){
                 k++;
                 intentos = 0;
-                
-                // Prueba
-                //cout << costeAc << " -- " << calculaCoste(solActual, flu, dis, sim) << endl;
-                
-                // escribo en el flichero la solucion encontrada
-                //log.registraLogDatos(solActual, costeAc);
             }else{
                 intentos++;
             }
@@ -63,17 +59,46 @@ public:
         return solActual;
     }
     
+    /**
+     * Función para registrar los datos de la solucion en un archivo .log
+     * @param log Objeto para crear el fichero.
+     * @param prueba Número de la prueba por la que va.
+     *              (De las 5 que hay que realizar con el DNI)
+     * @param sol Vector con la solución
+     * @param coste Coste de la solución
+     * @param tiempo Tiempo en calcularla
+     */
+    void regitroLog(CargarFichero log, int prueba, vector<int> sol, int coste, double tiempo, int semilla){
+        log.registraLogDatos(rutaLog, sol, coste);
+        log.registraTiempo(rutaLog, tiempo, semilla);
+    }
+    
 private:
+    string rutaLog; // Ruta del archivo log
     
     /**
-     * Funcion que calcula el coste para el intercambio de dos soluciones
-     * @param costeViejo
-     * @param pos1
-     * @param pos2
-     * @param sol
-     * @param flu
-     * @param dis
-     * @return 
+     * Función para registrar los datos en un archivo .log
+     * @param log Objeto para crear el fichero.
+     * @param prueba Número de la prueba por la que va.
+     *              (De las 5 que hay que realizar con el DNI)
+     * @param sol Vector con la solución
+     * @param coste Coste de la solución
+     * @param tiempo Tiempo en calcularla
+     */
+    void creaLog(CargarFichero log, int prueba){
+        rutaLog = carpetaLog + "LOCAL_MEJOR-" + to_string(prueba) + "_" + nombreArchivo + ".log";;
+        log.creaLog(rutaLog, prueba);
+    }
+    
+    /**
+     * Función que calcula el coste para el intercambio de dos posiciones del vector solcución.
+     * @param costeViejo Coste de la solucion actual
+     * @param pos1 Posicion a inntercambiar
+     * @param pos2 La otra posición a intercambiar
+     * @param sol Vector solución
+     * @param flu Matriz de flujo
+     * @param dis Matriz de distancia
+     * @return  Devuelve el coste de esa solución.
      */
     int calculaCoste2(int costeViejo, int pos1, int pos2 ,vector<int> sol, vector<vector<int>>& flu, vector<vector<int>>& dis){
         
@@ -89,6 +114,11 @@ private:
         return costeViejo;
     }
     
+    /**
+     * Función para crear una solución aleatoria de partida
+     * @param tam Tamaño del vector solución
+     * @return Devuelve el vector solucion creado.
+     */
     vector<int> creaSolucion(int tam){
         vector<int> solucion(tam);
         for(int i = 0; i < tam; i++){
@@ -101,14 +131,19 @@ private:
             swap(solucion[Randint(0,tam-1)],solucion[Randint(0,tam-1)]);
         } 
         
-        // Lectura de la solucion
-//        for(int i = 0; i < tam; i++){
-//            cout << solucion[i] << "    ";
-//        } 
         return solucion;
     }
     
-    bool generaCambios(int& costeActual, vector<int>& sol, vector<vector<int>>& flu, vector<vector<int>>& dis){
+    /**
+     * Función para generar los posibles vecinos
+     * @param log Objeto para registrar los cambios que se van realizando
+     * @param costeActual Coste de la solución actual
+     * @param sol Vector solución actual, se modifica por el mejor vecino si se mejora el coste
+     * @param flu Matriz de flujo
+     * @param dis Matriz de distancia
+     * @return Devuelve True si se ha movido a algun vecino, False si no lo hace
+     */
+    bool generaCambios(CargarFichero& log, int& costeActual, vector<int>& sol, vector<vector<int>>& flu, vector<vector<int>>& dis){
         int mejorCoste = std::numeric_limits<int>::max();
         int pos = -1;
         vector<pair<int,int>> vecinos; // vector con las permutaciones creadas
@@ -140,6 +175,7 @@ private:
         
         if(pos != -1 && mejorCoste < costeActual){
             costeActual = calculaCoste2(costeActual, vecinos[pos].first, vecinos[pos].second, sol,flu, dis);
+            log.registraMov(rutaLog, costeActual, vecinos[pos].first, vecinos[pos].second);
             swap(sol[vecinos[pos].first], sol[vecinos[pos].second]);//Al estar pasado referencia se modifica el original
             return true;
         }

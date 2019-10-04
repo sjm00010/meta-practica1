@@ -124,11 +124,11 @@ public:
      * @param v Vector solución
      * @param coste Coste de la solución
      */
-    void registraLogDatos(string log, vector<int>& v, int coste, double t){
+    void registraLogDatos(string log, vector<int>& v, int coste){
         // Crea un fichero de salida
         ofstream fs;
         fs.open(log, std::ios_base::app);
-        fs <<"(" << t <<" ms)\n"<< coste << " -->    ";
+        fs << coste << " -->    ";
         for (int i = 0; i < v.size(); i++) {
             fs << "(" << i+1 <<")->" << v[i] << "   ";
             if( i % 9 == 0 && i > 0){
@@ -139,9 +139,22 @@ public:
         fs.close();
     }
     
+    /**
+     * Función para registrar el tiempo del algoritmo.
+     * @param log Ruta del archivo .log
+     * @param t Tiempo
+     */
+    void registraTiempo(string log, double t, int semilla){
+        ofstream fs;
+        fs.open(log, std::ios_base::app);
+        fs << "Tiempo : " << t << " ms\n";
+        fs << "Semilla : " << semilla << "\n";
+    }
     
     void registraMov(string log, int coste, int pos1, int pos2){
-        
+        ofstream fs;
+        fs.open(log, std::ios_base::app);
+        fs << coste << " --> [" << pos1 << ", " << pos2 << "]\n";
     }
 
     /**

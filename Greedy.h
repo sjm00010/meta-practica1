@@ -12,7 +12,6 @@
 #include <string>
 #include <vector>
 #include <limits>
-#include <sstream>
 #include "random.h"
 #include "CargarFichero.h"
 
@@ -61,7 +60,8 @@ public:
     void regitroLog(CargarFichero log, int prueba, vector<int> sol, int coste, double tiempo){
         string nombreAr = carpetaLog + "GREEDY-" + to_string(prueba) + "_" + nombreArchivo + ".log";;
         log.creaLog(nombreAr, prueba);
-        log.registraLogDatos(nombreAr, sol, coste, tiempo);
+        log.registraLogDatos(nombreAr, sol, coste);
+        log.registraTiempo(nombreAr, tiempo, DNI);
     }
 
 
@@ -78,7 +78,6 @@ private:
                 pos = i;
             }
         }
-        //cout << "Distancia menor : " << v[pos] << " ("<< pos <<")" <<"\n";
         v[pos] = std::numeric_limits<int>::max(); // Marco la posicion como seleccionada
         return pos;
         
@@ -96,7 +95,6 @@ private:
                 pos = i;
             }
         }
-        //cout << "Flujo mayor : " << v[pos] <<" ("<< pos <<")"<< "     " ;
         v[pos] = -1; // Marco la posicion como seleccionada
         return pos;
     }

@@ -90,5 +90,29 @@ using namespace std;
     unsigned numDigitos (unsigned i){
         return i > 0 ? (int) log10 ((double) i) + 1 : 1;
     }
+    
+    int calculaSemilla(int prueba){
+        if(prueba != 1){
+            string semilla = to_string(DNI);
+            string j = semilla;
+            
+            int k = 0;
+            for(int i = (numDigitos(DNI) + (prueba-1)) % numDigitos(DNI); i < numDigitos(DNI); i++){
+                semilla[k] = semilla[i];
+                k++;
+            }
+            
+            k = 0;
+            for(int i = numDigitos(DNI) - (prueba-1); i < numDigitos(DNI); i++){
+                semilla[i] = j[k];
+                k++;
+            }
+            int sol = stoi(semilla);
+            return sol;
+        }
+        
+        return DNI;
+        
+    }
 #endif /* PARAMETROS_H */
 

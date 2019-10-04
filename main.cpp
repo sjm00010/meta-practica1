@@ -46,58 +46,55 @@ int main(int argc, char** argv) {
     carga.carga(ruta, a.flujo, a.distancia, a.simetrica);
     cout << " Carga completada con exito.\n";
     
-    
-    Set_random(DNI);
-   
-    
-    //cout << numDigitos(DNI);
+
+    // Prueba greedy   
+    Greedy alg;
+    cout << "\n-------------------------------------------------\n";
+    cout << "   SOLUCION GREEDY PARA : "+ nombreArchivo +"\n";
+    cout << "-------------------------------------------------\n";
+
+    // Inicio del contador
+    crono.start();
+
+    sol = alg.greedy(a.flujo, a.distancia);
+
+    // Fin del contador
+    crono.stop();
+
+    // Escribir soluciones en fichero .log
+    coste = calculaCoste(sol, a.flujo, a.distancia, a.simetrica);
+    tiempo = crono.getElapsedTimeInMilliSec();
+    alg.regitroLog(carga, 0, sol, coste, tiempo);
+
+    //Mostrar datos
+    mostrarResultado(sol, tiempo, a.flujo, a.distancia, coste);
     
     for(int i = 1; i <= NUM_PRUEBAS; i++){
-        // Prueba greedy
-        Greedy alg;
-        cout << "\n-------------------------------------------------\n";
-        cout << "   SOLUCION "+ to_string(i) +" GREEDY PARA : "+ nombreArchivo +"\n";
+        // Prueba Local del mejor
+        BLocalMejor alg2;
+        cout << "-------------------------------------------------\n";
+        cout << "   SOLUCION " + to_string(i) +" LOCAL MEJOR PARA : "+ nombreArchivo +"\n";
         cout << "-------------------------------------------------\n";
 
+        // Establezco la semilla para cada prueba
+        Set_random(calculaSemilla(i));
+        
         // Inicio del contador
         crono.start();
 
-        sol = alg.greedy(a.flujo, a.distancia);
+        sol = alg2.bLocalMejor(carga, i, a.flujo, a.distancia, a.simetrica);
 
         // Fin del contador
         crono.stop();
-        
+
         // Escribir soluciones en fichero .log
         coste = calculaCoste(sol, a.flujo, a.distancia, a.simetrica);
         tiempo = crono.getElapsedTimeInMilliSec();
-        alg.regitroLog(carga, i, sol, coste, tiempo);
+        alg2.regitroLog(carga, i, sol, coste, tiempo, calculaSemilla(i));
 
         //Mostrar datos
         mostrarResultado(sol, tiempo, a.flujo, a.distancia, coste);
     }
-    
-    // Prueba Local del mejor
-    BLocalMejor alg2;
-    cout << "-------------------------------------------------\n";
-    cout << "   SOLUCION LOCAL MEJOR PARA : "+ nombreArchivo +"\n";
-    cout << "-------------------------------------------------\n";
-    
-    // Inicio del contador
-    crono.start();
-    
-    sol = alg2.bLocalMejor(carga, a.flujo, a.distancia, a.simetrica);
-    
-    // Fin del contador
-    crono.stop();
-    
-    // Escribir soluciones en fichero .log
-    coste = calculaCoste(sol, a.flujo, a.distancia, a.simetrica);
-    tiempo = crono.getElapsedTimeInMilliSec();
-    //alg2.regitroLog(carga, i, sol, coste, tiempo);
-    
-    //Mostrar datos
-    mostrarResultado(sol, tiempo, a.flujo, a.distancia, coste);
-    
     return 0;
 }
 
