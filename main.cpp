@@ -9,6 +9,7 @@
 #include "Greedy.h"
 #include "random.h"
 #include "Parametros.h"
+#include "FuncionesComunes.h"
 #include "BLocalMejor.h"
 #include "Timer.h"
 

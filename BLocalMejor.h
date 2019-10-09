@@ -17,6 +17,7 @@
 #include <vector>
 
 #include "Parametros.h"
+#include "FuncionesComunes.h"
 #include "CargarFichero.h"
 
 using namespace std;
@@ -27,8 +28,10 @@ public:
     /**
      * Algoritmo de Busqueda Local del Mejor
      * @param log Archivo .log para guardar los resultados
+     * @param prueba Número de la prueba, de las ejecuciones con distinta semilla
      * @param flu Matriz de flujos
      * @param dis Matriz de distancias
+     * @param sim Indica si la matriz es simétrica
      * @return Devuelve el vector solución
      */
     vector<int> bLocalMejor(CargarFichero& log,int prueba, vector<vector<int>>& flu, vector<vector<int>>& dis, bool sim){
@@ -91,50 +94,6 @@ private:
     }
     
     /**
-     * Función que calcula el coste para el intercambio de dos posiciones del vector solcución.
-     * @param costeViejo Coste de la solucion actual
-     * @param pos1 Posicion a inntercambiar
-     * @param pos2 La otra posición a intercambiar
-     * @param sol Vector solución
-     * @param flu Matriz de flujo
-     * @param dis Matriz de distancia
-     * @return  Devuelve el coste de esa solución.
-     */
-    int calculaCoste2(int costeViejo, int pos1, int pos2 ,vector<int> sol, vector<vector<int>>& flu, vector<vector<int>>& dis){
-        
-        for(int i = 0; i < sol.size(); i++){
-            if(i != pos1 && i != pos2){
-                costeViejo += flu[pos1][i] * (dis[sol[pos2]][sol[i]] - dis[sol[pos1]][sol[i]])+
-                        flu[pos2][i] * (dis[sol[pos1]][sol[i]] - dis[sol[pos2]][sol[i]])+
-                        flu[i][pos1] * (dis[sol[i]][sol[pos2]] - dis[sol[i]][sol[pos1]])+
-                        flu[i][pos2] * (dis[sol[i]][sol[pos1]] - dis[sol[i]][sol[pos2]]);
-            }
-        }
-        
-        return costeViejo;
-    }
-    
-    /**
-     * Función para crear una solución aleatoria de partida
-     * @param tam Tamaño del vector solución
-     * @return Devuelve el vector solucion creado.
-     */
-    vector<int> creaSolucion(int tam){
-        vector<int> solucion(tam);
-        for(int i = 0; i < tam; i++){
-            solucion[i]=i;
-        }  
-
-        for(int i = 0; i < tam; i++){
-            // La primera generacion de numeros aleatorios sale generan el mismo
-            // número, por eso se deben de ejecutar un minimo de 2 veces el swap
-            swap(solucion[Randint(0,tam-1)],solucion[Randint(0,tam-1)]);
-        } 
-        
-        return solucion;
-    }
-    
-    /**
      * Función para generar los posibles vecinos
      * @param log Objeto para registrar los cambios que se van realizando
      * @param costeActual Coste de la solución actual
@@ -153,6 +112,7 @@ private:
             int pos1 = Randint(0,sol.size()-1);
             int pos2 = Randint(0,sol.size()-1);
             if(pos1 != pos2){
+                // Compruebo que la solución no esta ya creada
                 bool esta = false;
                 for(int j = 0; j < vecinos.size(); j++){
                     if(vecinos[j].first == pos1 && vecinos[j].second == pos2){
@@ -161,6 +121,7 @@ private:
                         esta = true;
                     }
                 }
+                
                 if(!esta){
                     vecinos.push_back(pair<int,int>(pos1, pos2));
                     

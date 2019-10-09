@@ -66,6 +66,9 @@ public:
                         fe >> NUM_PRUEBAS;
                         //cout << carpetaLog << endl;
                         break;
+                    case 8:
+                        fe >> TEN_TABU;
+                        break;
                 }
             }
         }
