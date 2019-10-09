@@ -1,8 +1,12 @@
+# Sergio's IDE files
 nbproject/
 dist/
 build/
-.idea/
 practica-1.exe.stackdump
-gdb.exe.stackdump
+gdb.exe.stackdumpi
 .dep.inc
 
+# Abdallah's IDE files
+.idea/
+CMakeLists.txt
+cmake-build-debug/
