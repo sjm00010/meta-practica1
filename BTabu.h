@@ -46,7 +46,7 @@ public:
         
         int k = 0; // Limite de 50000 evaluaciones
         int intentos = 0; // Limite de 100 intentos
-        while( k < LIM_EVA_LOCAL){
+        while( k < stoi(parametros[LIM_EVA_LOCAL], nullptr, 10)){
             // Busco 10 vecinos 
             if(generaCambios(log, costeAc, solActual, flu, dis)){
                 k++;
@@ -56,7 +56,7 @@ public:
                 intentos++;
             }
             
-            if(intentos == NUM_SOLU_LOCAL){
+            if(intentos == stoi(parametros[NUM_SOLU_LOCAL], nullptr, 10)){
                 cout << "Iteracion : " << k << "\n\n";
                 return solActual;
                 reiniciaMatriz(flu.size());
@@ -115,10 +115,10 @@ private:
     void registraMov(int pos1, int pos2){
         if(pos1 > pos2){
             tabu[pos2][pos1]++;
-            tabu[pos1][pos2] = TEN_TABU;
+            tabu[pos1][pos2] = stoi(parametros[TEN_TABU], nullptr, 10);
         }else{
             tabu[pos1][pos2]++;
-            tabu[pos2][pos1] = TEN_TABU;
+            tabu[pos2][pos1] = stoi(parametros[TEN_TABU], nullptr, 10);
         }
     }
     
@@ -172,7 +172,7 @@ private:
         vector<pair<int,int>> vecinos; // vector con las permutaciones creadas
         
         // Creo los diez posibles vecinos de forma aleatoria
-        while( vecinos.size() < NUM_SOLU_LOCAL){
+        while( vecinos.size() < stoi(parametros[NUM_SOLU_LOCAL], nullptr, 10)){
             int pos1 = Randint(0,sol.size()-1);
             int pos2 = Randint(0,sol.size()-1);
             if(pos1 != pos2){

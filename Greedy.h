@@ -58,10 +58,10 @@ public:
      * @param tiempo Tiempo en calcularla
      */
     void regitroLog(CargarFichero log, int prueba, vector<int> sol, int coste, double tiempo){
-        string nombreAr = carpetaLog + "GREEDY-" + to_string(prueba) + "_" + nombreArchivo + ".log";;
+        string nombreAr = parametros[CARPETA_LOG] + "GREEDY-" + to_string(prueba) + "_" + parametros[NOMBRE_ARCHIVO] + ".log";;
         log.creaLog(nombreAr, prueba);
         log.registraLogDatos(nombreAr, sol, coste);
-        log.registraTiempo(nombreAr, tiempo, DNI);
+        log.registraTiempo(nombreAr, tiempo, stoi(parametros[DNI], nullptr, 10));
     }
 
 

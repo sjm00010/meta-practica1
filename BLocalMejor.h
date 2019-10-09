@@ -15,6 +15,7 @@
 #define BLOCALMEJOR_H
 
 #include <vector>
+#include <sstream>
 
 #include "Parametros.h"
 #include "FuncionesComunes.h"
@@ -39,12 +40,13 @@ public:
         vector<int> solActual(flu.size());
         solActual = creaSolucion(flu.size());
         int costeAc = calculaCoste(solActual, flu, dis, sim);
+        int numSolucionesLocales;
         creaLog(log, prueba);
         log.registraLogDatos(rutaLog ,solActual, costeAc);
                 
         int k = 0; // Limite de 50000 evaluaciones
         int intentos = 0; // Limite de 100 intentos
-        while( k < LIM_EVA_LOCAL){
+        while( k < stoi(parametros[LIM_EVA_LOCAL], nullptr, 10)){
             // Busco 10 vecinos 
             if(generaCambios(log, costeAc, solActual, flu, dis)){
                 k++;
@@ -53,7 +55,7 @@ public:
                 intentos++;
             }
             
-            if(intentos == NUM_SOLU_LOCAL){
+            if(intentos == stoi(parametros[NUM_SOLU_LOCAL], nullptr, 10)){
                 cout << "Iteracion : " << k << "\n\n";
                 return solActual;
             }
@@ -89,7 +91,7 @@ private:
      * @param tiempo Tiempo en calcularla
      */
     void creaLog(CargarFichero log, int prueba){
-        rutaLog = carpetaLog + "LOCAL_MEJOR-" + to_string(prueba) + "_" + nombreArchivo + ".log";;
+        rutaLog = parametros[CARPETA_LOG] + "LOCAL_MEJOR-" + to_string(prueba) + "_" + parametros[NOMBRE_ARCHIVO] + ".log";;
         log.creaLog(rutaLog, prueba);
     }
     
@@ -108,7 +110,7 @@ private:
         vector<pair<int,int>> vecinos; // vector con las permutaciones creadas
         
         // Creo los diez posibles vecinos de forma aleatoria
-        while( vecinos.size() < NUM_SOLU_LOCAL){
+        while( vecinos.size() < stoi(parametros[NUM_SOLU_LOCAL], nullptr, 10)){
             int pos1 = Randint(0,sol.size()-1);
             int pos2 = Randint(0,sol.size()-1);
             if(pos1 != pos2){

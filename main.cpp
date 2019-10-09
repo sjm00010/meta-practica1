@@ -36,22 +36,22 @@ int main(int argc, char** argv) {
     vector<int> sol;
     int coste;
     double tiempo;
-    
+
     // Cargar de datos
     CargarFichero carga;
     carga.cargaParametros();
-    string ruta = carpetaDatos + nombreArchivo;
+    string ruta = parametros[CARPETA_DATOS] + parametros[NOMBRE_ARCHIVO];
     cout << "\n-------------------------------------------------\n";
-    cout << "       CARGA DE : "+ nombreArchivo +"\n";
+    cout << "       CARGA DE : "+ parametros[NOMBRE_ARCHIVO] +"\n";
     cout << "-------------------------------------------------\n";
     carga.carga(ruta, a.flujo, a.distancia, a.simetrica);
     cout << " Carga completada con exito.\n";
-    
 
-    // Prueba greedy   
+
+    // Prueba greedy
     Greedy alg;
     cout << "\n-------------------------------------------------\n";
-    cout << "   SOLUCION GREEDY PARA : "+ nombreArchivo +"\n";
+    cout << "   SOLUCION GREEDY PARA : "+ parametros[NOMBRE_ARCHIVO] +"\n";
     cout << "-------------------------------------------------\n";
 
     // Inicio del contador
@@ -69,17 +69,17 @@ int main(int argc, char** argv) {
 
     //Mostrar datos
     mostrarResultado(sol, tiempo, a.flujo, a.distancia, coste);
-    
-    for(int i = 1; i <= NUM_PRUEBAS; i++){
+
+    for(int i = 1; i <= stoi(parametros[NUM_PRUEBAS], nullptr, 10); i++){
         // Prueba Local del mejor
         BLocalMejor alg2;
         cout << "-------------------------------------------------\n";
-        cout << "   SOLUCION " + to_string(i) +" LOCAL MEJOR PARA : "+ nombreArchivo +"\n";
+        cout << "   SOLUCION " + to_string(i) +" LOCAL MEJOR PARA : "+ parametros[NOMBRE_ARCHIVO] +"\n";
         cout << "-------------------------------------------------\n";
 
         // Establezco la semilla para cada prueba
         Set_random(calculaSemilla(i));
-        
+
         // Inicio del contador
         crono.start();
 

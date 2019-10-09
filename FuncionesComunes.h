@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <cmath>
+#include <string>
 
 using namespace std;
 
@@ -81,9 +82,10 @@ using namespace std;
      * @return Nueva semilla
      */
     int calculaSemilla(int prueba){
-        int d = numDigitos(DNI) - --prueba;
+        int dni = stoi(parametros[DNI], nullptr, 10);
+        int d = numDigitos(dni) - --prueba;
         d = pow(10,d);
-        return (int)(DNI%d*pow(10,prueba)+(int)DNI/d);      
+        return (int)(dni%d*pow(10,prueba)+(int)dni/d);
     }
     
     /**
