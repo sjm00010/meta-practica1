@@ -20,7 +20,7 @@
 using namespace std;
 
 /*
- * 
+ * Estructura de apoyo que representa el aeropuerto
  */
 struct Aeropuerto{
     vector<vector<int>> flujo;

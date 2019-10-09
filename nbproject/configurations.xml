@@ -5,6 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>BLocalMejor.h</itemPath>
+      <itemPath>BTabu.h</itemPath>
       <itemPath>CargarFichero.h</itemPath>
       <itemPath>Greedy.h</itemPath>
       <itemPath>Parametros.h</itemPath>
@@ -60,6 +61,8 @@
       </compileType>
       <item path="BLocalMejor.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="BTabu.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="CargarFichero.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Greedy.h" ex="false" tool="3" flavor2="0">
@@ -98,6 +101,8 @@
         </asmTool>
       </compileType>
       <item path="BLocalMejor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="BTabu.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="CargarFichero.h" ex="false" tool="3" flavor2="0">
       </item>
