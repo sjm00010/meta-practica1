@@ -68,7 +68,7 @@ public:
                 }
                 
                 //Generar nueva solució
-                 //Dudas : 
+                //Dudas : hola 
                 // -Las soluciones anteriores desde cuando se tienen en cuenta?? sol en rojo de teoria
                 // -Como creo las soluciones nuevas al llegar a 100 intentos
             }
