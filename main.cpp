@@ -13,7 +13,7 @@
 #include "BLocalMejor.h"
 #include "Timer.h"
 
-//This is a commen//This is a commentt
+
 #include <iostream>
 #include <string>
 #include <vector>
