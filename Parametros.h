@@ -13,7 +13,7 @@
 using namespace std;
 
 // Parametros necesarios que se necesitan
-string rutaParam = "../parametros.txt";
+string rutaParam = "./parametros.txt";
 int numParam = 9;
 vector<string> parametros;
 // Parametros a cargar del archivo parametros.txt

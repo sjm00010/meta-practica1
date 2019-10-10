@@ -12,8 +12,8 @@
 #include "FuncionesComunes.h"
 #include "BLocalMejor.h"
 #include "Timer.h"
+#include "BTabu.h"
 
-//This is a commen//This is a commentt
 #include <iostream>
 #include <string>
 #include <vector>
@@ -97,7 +97,32 @@ int main(int argc, char** argv) {
         mostrarResultado(sol, tiempo, a.flujo, a.distancia, coste);
     }
     
+    for(int i = 1; i <= stoi(parametros[NUM_PRUEBAS], nullptr, 10); i++){
+        // Prueba Local del mejor
+        BTabu tabu;
+        cout << "-------------------------------------------------\n";
+        cout << "   SOLUCION " + to_string(i) +" TABU MEJOR PARA : "+ parametros[NOMBRE_ARCHIVO] +"\n";
+        cout << "-------------------------------------------------\n";
 
+        // Establezco la semilla para cada prueba
+        Set_random(calculaSemilla(i));
+
+        // Inicio del contador
+        crono.start();
+
+        sol = tabu.busquedaTabu(carga, i, a.flujo, a.distancia, a.simetrica);
+
+        // Fin del contador
+        crono.stop();
+
+        // Escribir soluciones en fichero .log
+        coste = calculaCoste(sol, a.flujo, a.distancia, a.simetrica);
+        tiempo = crono.getElapsedTimeInMilliSec();
+        //alg2.regitroLog(carga, i, sol, coste, tiempo, calculaSemilla(i));
+
+        //Mostrar datos
+        mostrarResultado(sol, tiempo, a.flujo, a.distancia, coste);
+    }
     
     return 0;
 }
