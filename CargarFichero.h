@@ -86,6 +86,39 @@ public:
             //Mostrar datos cargados
             //mostrarMatrices(flu, dis);
         }
+        
+        /**
+         * Funcion que registra si se a Diversificado o intensificado
+         * @param elec
+         */
+        void registraElec(string log, string elec){
+            ofstream fs;
+            fs.open(log, std::ios_base::app);
+            fs << "\n" << elec << "\n";
+        }
+        
+        /**
+         * Función que registra la nueva solución de partida con su coste
+         * @param log Nombre del archivo .log
+         * @param v Vector solución
+         * @param coste Coste de la solución
+         */
+        void registraLogSol(string log, vector<int> &v, int coste) {
+            // Abre un fichero de salida
+            ofstream fs;
+            fs.open(log, std::ios_base::app);
+            fs << "----------------------------------------------------\n";
+            fs << " Solución inicial : \n ";
+            for (int i = 0; i < v.size(); i++) {
+                fs << "(" << i + 1 << ")->" << v[i] << "   ";
+                if (i % 9 == 0 && i > 0) {
+                    fs << "\n ";
+                }
+            }
+            fs << "\n";
+            fs << "\n Coste : " << coste << "\n";
+            fs.close();
+        }
 
         /**
          * Función que registra la solución con su coste
@@ -94,17 +127,19 @@ public:
          * @param coste Coste de la solución
          */
         void registraLogDatos(string log, vector<int> &v, int coste) {
-            // Crea un fichero de salida
+            // Abre un fichero de salida
             ofstream fs;
             fs.open(log, std::ios_base::app);
-            fs << coste << " -->    ";
+            fs << "----------------------------------------------------\n";
+            fs << " Mejor solución : \n ";
             for (int i = 0; i < v.size(); i++) {
                 fs << "(" << i + 1 << ")->" << v[i] << "   ";
                 if (i % 9 == 0 && i > 0) {
-                    fs << "\n           ";
+                    fs << "\n ";
                 }
             }
             fs << "\n";
+            fs << "\n Coste : " << coste << "\n";
             fs.close();
         }
 
@@ -116,21 +151,51 @@ public:
         void registraTiempo(string log, double t, int semilla) {
             ofstream fs;
             fs.open(log, std::ios_base::app);
-            fs << "Tiempo : " << t << " ms\n";
+            fs << "----------------------------------------------------\n";
+            fs << "Tiempo :  " << t << " ms \n";
             fs << "Semilla : " << semilla << "\n";
         }
 
-        void registraMov(string log, int coste, int pos1, int pos2) {
+        /**
+         * Funcion para registrar los movimientos realizados
+         * @param log Ruta del .log
+         * @param coste Coste de la solución actual
+         * @param pos1 Posición 1
+         * @param pos2 Posición 2
+         * @param it N. de iteración
+         */
+        void registraMov(string log, int coste, int pos1, int pos2, int it) {
             ofstream fs;
             fs.open(log, std::ios_base::app);
-            fs << coste << " --> [" << pos1 << ", " << pos2 << "]\n";
+            fs << "----------------------------------------------------\n";
+            fs << " Movimiento : " << "[" << pos1 << ", " << pos2 << "]\n";
+            fs << " Coste :      " << coste << "\n";
+            fs << " Iteración :  " << it << "\n";
+        }
+        
+        /**
+         * Funcion para registrar los movimientos realizados en tabú
+         * @param log Ruta del .log
+         * @param coste Coste de la solución actual
+         * @param pos1 Posición 1
+         * @param pos2 Posición 2
+         * @param it N. de iteración
+         */
+        void registraMovTabu(string log, int coste, int pos1, int pos2, int it, int ent) {
+            ofstream fs;
+            fs.open(log, std::ios_base::app);
+            fs << "----------------------------------------------------\n";
+            fs << " Movimiento : " << "[" << pos1 << ", " << pos2 << "]\n";
+            fs << " Coste :      " << coste << "\n";
+            fs << " Iteración :  " << it << "\n";
+            fs << " Entorno :    " << ent << "\n";
         }
 
         /**
          * Función que crea el archivo .log
          * @param nombre Nombre del archivo
          */
-        void creaLog(string nombreAr, int prueba) {
+        void creaLog(string nombreAr) {
             // Crea un fichero de salida
             ofstream fs(nombreAr);
             fs.close();

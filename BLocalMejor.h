@@ -42,13 +42,13 @@ public:
         int costeAc = calculaCoste(solActual, flu, dis, sim);
         int numSolucionesLocales;
         creaLog(log, prueba);
-        log.registraLogDatos(rutaLog ,solActual, costeAc);
+        log.registraLogSol(rutaLog ,solActual, costeAc);
                 
         int k = 0; // Limite de 50000 evaluaciones
         int intentos = 0; // Limite de 100 intentos
         while( k < stoi(parametros[LIM_EVA_LOCAL], nullptr, 10)){
             // Busco 10 vecinos 
-            if(generaCambios(log, costeAc, solActual, flu, dis)){
+            if(generaCambios(log, costeAc, solActual, k, flu, dis)){
                 k++;
                 intentos = 0;
             }else{
@@ -91,8 +91,8 @@ private:
      * @param tiempo Tiempo en calcularla
      */
     void creaLog(CargarFichero log, int prueba){
-        rutaLog = parametros[CARPETA_LOG] + "LOCAL_MEJOR-" + to_string(prueba) + "_" + parametros[NOMBRE_ARCHIVO] + ".log";;
-        log.creaLog(rutaLog, prueba);
+        rutaLog = parametros[CARPETA_LOG] + parametros[NOMBRE_ARCHIVO] + "-LOCAL_" + to_string(prueba) + ".log";;
+        log.creaLog(rutaLog);
     }
     
     /**
@@ -104,7 +104,7 @@ private:
      * @param dis Matriz de distancia
      * @return Devuelve True si se ha movido a algun vecino, False si no lo hace
      */
-    bool generaCambios(CargarFichero& log, int& costeActual, vector<int>& sol, vector<vector<int>>& flu, vector<vector<int>>& dis){
+    bool generaCambios(CargarFichero& log, int& costeActual, vector<int>& sol, int it, vector<vector<int>>& flu, vector<vector<int>>& dis){
         int mejorCoste = std::numeric_limits<int>::max();
         int pos = -1;
         vector<pair<int,int>> vecinos; // vector con las permutaciones creadas
@@ -138,7 +138,7 @@ private:
         
         if(pos != -1 && mejorCoste < costeActual){
             costeActual = calculaCoste2(costeActual, vecinos[pos].first, vecinos[pos].second, sol,flu, dis);
-            log.registraMov(rutaLog, costeActual, vecinos[pos].first, vecinos[pos].second);
+            log.registraMov(rutaLog, costeActual, it, vecinos[pos].first, vecinos[pos].second);
             swap(sol[vecinos[pos].first], sol[vecinos[pos].second]);//Al estar pasado referencia se modifica el original
             return true;
         }

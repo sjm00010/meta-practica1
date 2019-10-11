@@ -15,6 +15,7 @@
 #include "Parametros.h"
 #include "FuncionesComunes.h"
 #include "random.h"
+#include "CargarFichero.h"
 
 using namespace std;
 
@@ -43,14 +44,14 @@ public:
         mejorSolucion = solActual;
         int costeAc = calculaCoste(solActual, flu, dis, sim);
         int mejorCoste = costeAc;
-        //creaLog(log, prueba);
-        //log.registraLogDatos(rutaLog ,solActual, costeAc);
+        creaLog(log, prueba);
+        log.registraLogSol(rutaLog ,solActual, costeAc);
         
         int k = 0; // Limite de 50000 evaluaciones
         int intentos = 0; // Limite de 100 intentos
         while( k < stoi(parametros[LIM_EVA_LOCAL])){
             // Busco 10 vecinos 
-            if(generaCambios(log, costeAc, solActual, flu, dis)){
+            if(generaCambios(log, costeAc, solActual, k, intentos, flu, dis, sim)){
                 k++;
                 intentos = 0;
                 guardaMov(solActual);
@@ -59,25 +60,37 @@ public:
             }
             
             if(intentos == stoi(parametros[NUM_SOLU_LOCAL])){              
+                k++;
+                intentos = 0;
+                
                 //Almaceno la mejor solución hasta el momento
                 if(costeAc < mejorCoste){
                     mejorSolucion = solActual;
                     mejorCoste = costeAc;
                 }
                 
-                solActual = nuevaSol();
+                solActual = nuevaSol(log);
                 costeAc = calculaCoste(solActual, flu, dis, sim);
+                //log.registraLogSol(rutaLog ,solActual, costeAc);
                 
-                //Generar nueva solución
-                //Dudas :
-                // -Las soluciones anteriores desde cuando se tienen en cuenta?? sol en rojo de teoria
-                // -Como creo las soluciones nuevas al llegar a 100 intentos
-                //soluciones, largo plazo, corto plazo
-                //todas las memorias se reinician
             }
+            cout << "Iteracion : " << k << "\n";
         }
-        cout << "Iteracion : " << k << "\n";
         return solActual;
+    }
+    
+    /**
+     * Función para registrar los datos de la solucion en un archivo .log
+     * @param log Objeto para crear el fichero.
+     * @param prueba Número de la prueba por la que va.
+     *              (De las 5 que hay que realizar con el DNI)
+     * @param sol Vector con la solución
+     * @param coste Coste de la solución
+     * @param tiempo Tiempo en calcularla
+     */
+    void regitroLog(CargarFichero log, int prueba, vector<int> sol, int coste, double tiempo, int semilla){
+        log.registraLogDatos(rutaLog, sol, coste);
+        log.registraTiempo(rutaLog, tiempo, semilla);
     }
     
 private:
@@ -85,6 +98,24 @@ private:
     vector<vector<int>> frecuencias;
     list<vector<int>> movRecientes;
     int posLista = 0;
+    int numDiv = 0;
+    int numInt = 0;
+    
+    string rutaLog; // Ruta del archivo log
+    
+    /**
+     * Función para registrar los datos en un archivo .log
+     * @param log Objeto para crear el fichero.
+     * @param prueba Número de la prueba por la que va.
+     *              (De las 5 que hay que realizar con el DNI)
+     * @param sol Vector con la solución
+     * @param coste Coste de la solución
+     * @param tiempo Tiempo en calcularla
+     */
+    void creaLog(CargarFichero log, int prueba){
+        rutaLog = parametros[CARPETA_LOG] + parametros[NOMBRE_ARCHIVO] + "-TABU_" + to_string(prueba) + ".log";;
+        log.creaLog(rutaLog);
+    }
     
     /**
      * Función para inicializar la matriz tabú
@@ -101,31 +132,18 @@ private:
         }
     }
     
-//    /**
-//     * Función para reinicializar la tenencia tabú cuando se llega al máximo
-//     * de intentos.
-//     * @param tam Tamaño de la matriz
-//     */
-//    void reiniciaMatriz(int tam){
-//        for(int i = 0; i < tam; i++){
-//            for(int j = 0; j < tam; j++){
-//                frecuencias[i][j] = 0;
-//            }
-//        }
-//    }
-    
     /**
      * Función que registra la frecuencia con la que aparece una solución
      * @param pos1 Posición 1
      * @param pos2 Posición 2
      */
-    void registraMov(int pos1, int pos2){
+    void registraMov(int pos1, int pos2, bool sim){
         // Cuidado con las asimetricas, esto solo va con las simetricas
-        if(true){// cambiar por sim
+        if(sim){// cambiar por sim
             frecuencias[pos2][pos1]++;
             frecuencias[pos1][pos2]++;
         }else{
-            
+            frecuencias[pos1][pos2]++;
         }
         
     }
@@ -142,6 +160,10 @@ private:
         movRecientes.insert(it, sol);
     }
     
+    /**
+     * Función para diversificar
+     * @return Solcuioón
+     */
     vector<int> diversificar(){
         vector<int> sol(frecuencias.size(), -1);
         for(int i = 0; i < frecuencias.size();i++){
@@ -158,6 +180,10 @@ private:
         return sol;
     }
     
+    /**
+     * Función para intensificar
+     * @return Solución
+     */
     vector<int> intensificar(){
         vector<int> sol(frecuencias.size(), -1);
         for(int i = 0; i < frecuencias.size();i++){
@@ -182,11 +208,20 @@ private:
         return sol;
     }
     
-    vector<int> nuevaSol(){
+    /**
+     * Función que decide si se diversifica o se intensifica y devuelve la 
+     * solución correspondiente
+     * @return Solución de partida
+     */
+    vector<int> nuevaSol(CargarFichero& log){
         float pro = Randfloat(0,1);
         if(pro > 0.5){
+            numDiv++;
+            //log.registraElec(rutaLog, "Diversificación");
             return diversificar();
         }else{
+            //log.registraElec(rutaLog, "Intensificación");
+            numInt++;
             return intensificar();
         }
     }
@@ -209,6 +244,10 @@ private:
         return true;
     }
     
+    /**
+     * Función para reinicializar
+     * @param tam
+     */
     void reinicializacion(int tam){
         movRecientes.clear();
     }
@@ -222,7 +261,8 @@ private:
      * @param dis Matriz de distancia
      * @return Devuelve True si se ha movido a algun vecino, False si no lo hace
      */
-    bool generaCambios(CargarFichero& log, int& costeActual, vector<int>& sol, vector<vector<int>>& flu, vector<vector<int>>& dis){
+    bool generaCambios(CargarFichero& log, int& costeActual, vector<int>& sol,
+            int it, int ent, vector<vector<int>>& flu, vector<vector<int>>& dis, bool sim){
         int mejorCoste = std::numeric_limits<int>::max();
         int pos = -1;
         vector<pair<int,int>> vecinos; // vector con las permutaciones creadas
@@ -254,21 +294,18 @@ private:
                             pos = vecinos.size()-1;
                         }
                     }
-
                 }
             }
         }
         
         if(pos != -1 && mejorCoste < costeActual){
             costeActual = calculaCoste2(costeActual, vecinos[pos].first, vecinos[pos].second, sol,flu, dis);
-            registraMov(vecinos[pos].first, vecinos[pos].second);
-            
-            //log.registraMov(rutaLog, costeActual, vecinos[pos].first, vecinos[pos].second);
+            registraMov(vecinos[pos].first, vecinos[pos].second, sim);
+            //log.registraMovTabu(rutaLog, costeActual, vecinos[pos].first, vecinos[pos].second, it, ent);
             swap(sol[vecinos[pos].first], sol[vecinos[pos].second]);//Al estar pasado referencia se modifica el original
             guardaMov(sol);
             return true;
         }
-        
         return false;
     }
 };

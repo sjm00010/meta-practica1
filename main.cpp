@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
     // Escribir soluciones en fichero .log
     coste = calculaCoste(sol, a.flujo, a.distancia, a.simetrica);
     tiempo = crono.getElapsedTimeInMilliSec();
-    alg.regitroLog(carga, 0, sol, coste, tiempo);
+    alg.regitroLog(carga, sol, coste, tiempo);
 
     //Mostrar datos
     mostrarResultado(sol, tiempo, a.flujo, a.distancia, coste);

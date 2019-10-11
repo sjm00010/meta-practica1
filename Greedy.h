@@ -57,9 +57,9 @@ public:
      * @param coste Coste de la solución
      * @param tiempo Tiempo en calcularla
      */
-    void regitroLog(CargarFichero log, int prueba, vector<int> sol, int coste, double tiempo){
-        string nombreAr = parametros[CARPETA_LOG] + "GREEDY-" + to_string(prueba) + "_" + parametros[NOMBRE_ARCHIVO] + ".log";;
-        log.creaLog(nombreAr, prueba);
+    void regitroLog(CargarFichero log, vector<int> sol, int coste, double tiempo){
+        string nombreAr = parametros[CARPETA_LOG] + parametros[NOMBRE_ARCHIVO] + "-GREEDY"+ ".log";;
+        log.creaLog(nombreAr);
         log.registraLogDatos(nombreAr, sol, coste);
         log.registraTiempo(nombreAr, tiempo, stoi(parametros[DNI], nullptr, 10));
     }
