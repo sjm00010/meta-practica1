@@ -49,7 +49,7 @@ public:
         
         int k = 0; // Limite de 50000 evaluaciones
         int intentos = 0; // Limite de 100 intentos
-        while( k < stoi(parametros[LIM_EVA_LOCAL])){
+        while( k <= stoi(parametros[LIM_EVA_LOCAL])){
             // Busco 10 vecinos 
             if(generaCambios(log, costeAc, solActual, k, intentos, flu, dis, sim)){
                 k++;
@@ -69,14 +69,17 @@ public:
                     mejorCoste = costeAc;
                 }
                 
+                movRecientes.clear();
                 solActual = nuevaSol(log);
                 costeAc = calculaCoste(solActual, flu, dis, sim);
-                //log.registraLogSol(rutaLog ,solActual, costeAc);
+                log.registraLogSol(rutaLog ,solActual, costeAc);
                 
             }
-            cout << "Iteracion : " << k << "\n";
+            //cout << "Iteracion : " << k << "\n";
         }
-        return solActual;
+        string sol = " Diversificaciones : " + to_string(numDiv) + " | Intensificaciones : " + to_string(numInt) + "\n";
+        log.registraElec(rutaLog, sol);
+        return mejorSolucion;
     }
     
     /**
@@ -90,7 +93,7 @@ public:
      */
     void regitroLog(CargarFichero log, int prueba, vector<int> sol, int coste, double tiempo, int semilla){
         log.registraLogDatos(rutaLog, sol, coste);
-        log.registraTiempo(rutaLog, tiempo, semilla);
+        log.registraTiempoTabu(rutaLog, tiempo, semilla);
     }
     
 private:
@@ -138,8 +141,7 @@ private:
      * @param pos2 Posición 2
      */
     void registraMov(int pos1, int pos2, bool sim){
-        // Cuidado con las asimetricas, esto solo va con las simetricas
-        if(sim){// cambiar por sim
+        if(sim){
             frecuencias[pos2][pos1]++;
             frecuencias[pos1][pos2]++;
         }else{
@@ -217,10 +219,10 @@ private:
         float pro = Randfloat(0,1);
         if(pro > 0.5){
             numDiv++;
-            //log.registraElec(rutaLog, "Diversificación");
+            log.registraElec(rutaLog, "Diversificación");
             return diversificar();
         }else{
-            //log.registraElec(rutaLog, "Intensificación");
+            log.registraElec(rutaLog, "Intensificación");
             numInt++;
             return intensificar();
         }
@@ -242,14 +244,6 @@ private:
             }
         }
         return true;
-    }
-    
-    /**
-     * Función para reinicializar
-     * @param tam
-     */
-    void reinicializacion(int tam){
-        movRecientes.clear();
     }
     
     /**
@@ -301,7 +295,7 @@ private:
         if(pos != -1 && mejorCoste < costeActual){
             costeActual = calculaCoste2(costeActual, vecinos[pos].first, vecinos[pos].second, sol,flu, dis);
             registraMov(vecinos[pos].first, vecinos[pos].second, sim);
-            //log.registraMovTabu(rutaLog, costeActual, vecinos[pos].first, vecinos[pos].second, it, ent);
+            log.registraMovTabu(rutaLog, costeActual, vecinos[pos].first, vecinos[pos].second, it, ent);
             swap(sol[vecinos[pos].first], sol[vecinos[pos].second]);//Al estar pasado referencia se modifica el original
             guardaMov(sol);
             return true;

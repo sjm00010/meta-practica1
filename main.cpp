@@ -117,11 +117,11 @@ int main(int argc, char** argv) {
 
         // Escribir soluciones en fichero .log
         coste = calculaCoste(sol, a.flujo, a.distancia, a.simetrica);
-        tiempo = crono.getElapsedTimeInMilliSec();
-        //alg2.regitroLog(carga, i, sol, coste, tiempo, calculaSemilla(i));
+        tiempo = crono.getElapsedTime();
+        tabu.regitroLog(carga, i, sol, coste, tiempo, calculaSemilla(i));
 
         //Mostrar datos
-        mostrarResultado(sol, tiempo, a.flujo, a.distancia, coste);
+        mostrarResultadoTabu(sol, tiempo, a.flujo, a.distancia, coste);
     }
     
     return 0;

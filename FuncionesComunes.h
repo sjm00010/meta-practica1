@@ -67,6 +67,25 @@ using namespace std;
     }
     
     /**
+     * Función que muestra por consola la solción calculada.
+     * @param v Vector con la solución.
+     * @param t Tiempo que tarda el algoritmo.
+     * @param flu Matriz de flujos
+     * @param dis Matriz de distancias
+     */
+    void mostrarResultadoTabu( vector<int>& v, double t, vector<vector<int>>& flu, vector<vector<int>>& dis, int coste){
+        for(int i = 1; i < v.size(); i++){
+            printf(" (%2d) -%3d  ",i, v[i-1]+1);
+            if (i % 5 == 0 && i > 0 && i != v.size()-1){
+                cout << "\n";
+            }
+        } 
+        cout << "\n\n";
+        cout << "   El coste de la solucion es : " << coste << "\n";
+        cout << "   Tiempo empleado : " << t << " s\n";
+    }
+    
+    /**
      * Función que te dice la cantidad de digitos de un número. 
      * Auxiliar para rotar los numeros del DNI.
      * @param i Numero a analizar.

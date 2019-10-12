@@ -110,7 +110,7 @@ public:
             fs << "----------------------------------------------------\n";
             fs << " Solución inicial : \n ";
             for (int i = 0; i < v.size(); i++) {
-                fs << "(" << i + 1 << ")->" << v[i] << "   ";
+                fs << "(" << i + 1 << ")->" << v[i]+1 << "   ";
                 if (i % 9 == 0 && i > 0) {
                     fs << "\n ";
                 }
@@ -133,7 +133,7 @@ public:
             fs << "----------------------------------------------------\n";
             fs << " Mejor solución : \n ";
             for (int i = 0; i < v.size(); i++) {
-                fs << "(" << i + 1 << ")->" << v[i] << "   ";
+                fs << "(" << i + 1 << ")->" << v[i]+1 << "   ";
                 if (i % 9 == 0 && i > 0) {
                     fs << "\n ";
                 }
@@ -153,6 +153,19 @@ public:
             fs.open(log, std::ios_base::app);
             fs << "----------------------------------------------------\n";
             fs << "Tiempo :  " << t << " ms \n";
+            fs << "Semilla : " << semilla << "\n";
+        }
+        
+        /**
+         * Función para registrar el tiempo del algoritmo tabú.
+         * @param log Ruta del archivo .log
+         * @param t Tiempo
+         */
+        void registraTiempoTabu(string log, double t, int semilla) {
+            ofstream fs;
+            fs.open(log, std::ios_base::app);
+            fs << "----------------------------------------------------\n";
+            fs << "Tiempo :  " << t << " s \n";
             fs << "Semilla : " << semilla << "\n";
         }
 
