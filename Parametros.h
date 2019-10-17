@@ -1,6 +1,6 @@
 /*
  * File:   Parametros.h
- * Author: PORTATIL
+ * Author: sjm00010
  *
  * Created on 27 de septiembre de 2019, 10:58
  */
@@ -16,6 +16,7 @@ using namespace std;
 string rutaParam = "./parametros.txt";
 int numParam = 10;
 vector<string> parametros;
+
 // Parametros a cargar del archivo parametros.txt
 enum valor {
     CARPETA_DATOS = 0,

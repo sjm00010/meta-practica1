@@ -1,6 +1,6 @@
 /* 
  * File:   FuncionesComunes.h
- * Author: PORTATIL
+ * Author: sjm00010
  *
  * Created on 9 de octubre de 2019, 12:58
  */
@@ -56,7 +56,7 @@ using namespace std;
      */
     void mostrarResultado( vector<int>& v, double t, vector<vector<int>>& flu, vector<vector<int>>& dis, int coste){
         for(int i = 0; i < v.size(); i++){
-            printf(" (%2d) -%3d  ",i+1, v[i-1]+1);
+            printf(" (%2d) -%3d  ",i+1, v[i]+1);
             if (i % 5 == 0 && i > 0 && i != v.size()-1){
                 cout << "\n";
             }
@@ -75,7 +75,7 @@ using namespace std;
      */
     void mostrarResultadoTabu( vector<int>& v, double t, vector<vector<int>>& flu, vector<vector<int>>& dis, int coste){
         for(int i = 0; i < v.size(); i++){
-            printf(" (%2d) -%3d  ",i+1, v[i-1]+1);
+            printf(" (%2d) -%3d  ",i+1, v[i]+1);
             if (i % 5 == 0 && i > 0 && i != v.size()-1){
                 cout << "\n";
             }
@@ -146,7 +146,7 @@ using namespace std;
             // La primera generacion de numeros aleatorios sale generan el mismo
             // número, por eso se deben de ejecutar un minimo de 2 veces el swap
             swap(solucion[Randint(0,tam-1)],solucion[Randint(0,tam-1)]);
-        } 
+        }
         
         return solucion;
     }

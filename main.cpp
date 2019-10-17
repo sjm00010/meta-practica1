@@ -6,13 +6,13 @@
  */
 
 #include "CargarFichero.h"
-#include "Greedy.h"
+#include "Alg01-Clase01-Grupo01.h"
 #include "random.h"
 #include "Parametros.h"
 #include "FuncionesComunes.h"
-#include "BLocalMejor.h"
+#include "Alg02-Clase01-Grupo01.h"
 #include "Timer.h"
-#include "BTabu.h"
+#include "Alg03-Clase01-Grupo01.h"
 
 #include <iostream>
 #include <string>

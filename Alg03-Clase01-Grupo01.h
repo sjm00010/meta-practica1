@@ -22,17 +22,6 @@ using namespace std;
 
 class BTabu {
 public:
-    /*
-     * Dudas
-     * ¿Todos los vecinos se meten en la lista tabu?
-     * ¿Cojo el mejor de los 10 vecinos generados?¿O el mejor de los 1000? Mejor de las 1000
-     * ¿Cuando reinicializo, a los 1000 vecinos? NO, si 100 veces empeoras la mejor solucion, entonces reinicializas
-     * En caso afirmativo,¿Como cojo el mejor de los 1000 y reinizializo a la vez, es imposible?
-     * En caso negativo,¿Cada cuanto reinicializo?
-     * La lista tabu es del mismo tamaño de la tenencia, ¿misma lista de movimientos y tabu o mejor listas separadas? Mirar si se puede hacer todo en una lista
-     * Estancamiento mejora con el mejor del momento no con el mejor de mejores
-     */
-    
     
     /**
      * Función que realiza la busqueda tabú
@@ -74,18 +63,17 @@ public:
         int k = 0; // Limite de 50000 evaluaciones
         int intentos = 0; // Limite de 100 intentos
         int estancamiento = 0; // Limite del estancamiento, 100 entornos
-        
+
         while( k <= stoi(parametros[LIM_EVA_LOCAL])){
-            
-            // Busco 10 vecinos, cada iteración se calcula con el vecino anterior
+
+            // Calcúlo 10 vecinos
             generaCambios(log, costeSol, solParcial, k, intentos, flu, dis, sim);
+            
             if(costeMejorParcial > costeSol){
-                k++;  
-                if(k == 25462)
-                    cout << "ya" << endl;
+                k++;
                 intentos = 0;
                 estancamiento = 0;
-                guardaMov(solParcial);
+                guardaSol(solParcial);
                 mejorParcial = solParcial;
                 costeMejorParcial = costeSol;
                 
@@ -112,11 +100,12 @@ public:
                 
                 if(estancamiento == stoi(parametros[ESTANCAMIENTO])){
                     // Limpio la memoria
+                    solRecientes.clear();
                     movRecientes.clear();
-                    posLista = 0;
+                    posListaSol = 0;
                     estancamiento = 0;
                     
-                    log.registraElec(rutaLog,"Estancamiento");
+                    log.registraCadena(rutaLog,"Estancamiento");
                     
                     // Creo la nueva solucion, diversificando o intensificando
                     solParcial = nuevaSol(log);
@@ -139,7 +128,7 @@ public:
         
 
         string sol = " Diversificaciones : " + to_string(numDiv) + " | Intensificaciones : " + to_string(numInt) + "\n";
-        log.registraElec(rutaLog, sol);
+        log.registraCadena(rutaLog, sol);
         return mejorSolucion;
     }
     
@@ -160,8 +149,10 @@ public:
 private:
     // Matriz para guardar los resultados generados por la busqueda tabú
     vector<vector<int>> frecuencias;
-    list<vector<int>> movRecientes;
-    int posLista = 0;
+    list<vector<int>> solRecientes;
+    list<pair<int,int>> movRecientes;
+    int posListaSol = 0;
+    int posListaMov = 0;
     int numDiv = 0;
     int numInt = 0;
     
@@ -187,7 +178,7 @@ private:
      */
     void iniciaMatriz(int tam){
         frecuencias.resize(tam);
-        movRecientes.resize(tam);
+        solRecientes.resize(tam);
         for(int i = 0; i < tam; i++){
             frecuencias[i].resize(tam);
             for(int j = 0; j < tam; j++){
@@ -220,9 +211,9 @@ private:
         for(int i = 0; i < frecuencias.size();i++){
             int pos;
             int menor = std::numeric_limits<int>::max();
-            for(int j = 0; j < frecuencias.size(); j++){// Cuidado con asimetricos
+            for(int j = 0; j < frecuencias.size(); j++){
                 bool esta = false;
-                for(int k = 0; k < sol.size(); k++){
+                for(int k = 0; k < i; k++){
                     if(sol[k] == j){
                         esta = true;
                     }
@@ -246,9 +237,9 @@ private:
         for(int i = 0; i < frecuencias.size();i++){
             int pos;
             int mayor = -1;
-            for(int j = 0; j < frecuencias.size(); j++){// Cuidado con asimetricos
+            for(int j = 0; j < frecuencias.size(); j++){
                 bool esta = false;
-                for(int k = 0; k < sol.size(); k++){
+                for(int k = 0; k < i; k++){
                     if(sol[k] == j){
                         esta = true;
                     }
@@ -269,12 +260,12 @@ private:
      * @return Solución de partida
      */
     vector<int> nuevaSol(CargarFichero& log){ 
-        if( Randfloat(0,1) > 0.5 ){
+        if( Randfloat(0,1) > 0.5 ){ // Randfloat(0,1) > 0.5 
             numDiv++;
-            log.registraElec(rutaLog, "Diversificación");
+            log.registraCadena(rutaLog, "Diversificación");
             return diversificar();
         }else{
-            log.registraElec(rutaLog, "Intensificación");
+            log.registraCadena(rutaLog, "Intensificación");
             numInt++;
             return intensificar();
         }
@@ -289,25 +280,44 @@ private:
      */
     bool compruebaSol(vector<int> sol, int pos1, int pos2){
         swap(sol[pos1], sol[pos2]);//Al estar pasado por copia no se modifica el original
-        if(posLista > 0){
-            for (list<vector<int>>::iterator it = movRecientes.begin(); it != movRecientes.end(); it++){
+        if(posListaSol > 0){
+            for (list<vector<int>>::iterator it = solRecientes.begin(); it != solRecientes.end(); it++){
                 if(*it == sol){
                     return false;
                 }
             }
         }
+        
+        for(list<pair<int,int>>::iterator it = movRecientes.begin(); it != movRecientes.end(); it++){
+            if(it->first == pos1 && it->second == pos2)
+                return false;
+        }
+        
         return true;
+    }
+    
+    /**
+     * Función que guarda la solución generada
+     * @param sol Movimiento generado
+     */
+    void guardaSol(vector<int> sol){
+        list<vector<int>>::iterator it = solRecientes.begin();
+        for(int i = 0; i < posListaSol; i++)
+            it++;
+        posListaSol++;
+        solRecientes.insert(it, sol);
     }
     
     /**
      * Función que guarda el movimiento generado
      * @param sol Movimiento generado
      */
-    void guardaMov(vector<int> sol){
-        list<vector<int>>::iterator it = movRecientes.begin();
-        for(int i = 0; i < posLista; i++)
+    void guardaMov(int pos1, int pos2){
+        list<pair<int,int>>::iterator it = movRecientes.begin();
+        for(int i = 0; i < posListaMov; i++)
             it++;
-        posLista++;
+        posListaMov++;
+        pair<int,int> sol(pos1,pos2);
         movRecientes.insert(it, sol);
     }
     
@@ -323,7 +333,7 @@ private:
     void generaCambios(CargarFichero& log, int& costeActual, vector<int>& sol,
             int it, int ent, vector<vector<int>>& flu, vector<vector<int>>& dis, bool sim){
         int mejorCoste = std::numeric_limits<int>::max();
-        int pos = -1;
+        int pos;
         vector<pair<int,int>> vecinos; // vector con las permutaciones creadas
         
         // Creo los diez posibles vecinos de forma aleatoria
@@ -341,10 +351,11 @@ private:
                     }
                 }
                 
-                if(!esta){
+                if(!esta && (pos1 < flu.size() && pos2 < flu.size())){ // No se porque pero me genera el número 20 en pos2 en la iteracion 25462
                     vecinos.push_back(pair<int,int>(pos1, pos2));
                     
                     if(compruebaSol(sol, pos1, pos2)){ //Comprueba que no este en la lista de movimientos
+                        
                         int coste = calculaCoste2(costeActual,pos1, pos2, sol, flu, dis);
                         // Voy seleccionando la mejor solucion hasta el momento.
                         // Y que no sea una solución tabú
@@ -357,16 +368,14 @@ private:
             }
         }
         
-        if(pos != -1){
-            if(costeActual > mejorCoste){
-                registraMov(vecinos[pos].first, vecinos[pos].second, sim);
-                log.registraMovTabu(rutaLog, mejorCoste, vecinos[pos].first, vecinos[pos].second, it, ent);
-                guardaMov(sol);
-            }
-
-            costeActual = mejorCoste;
-            swap(sol[vecinos[pos].first], sol[vecinos[pos].second]);//Al estar pasado referencia se modifica el original
+        if(costeActual > mejorCoste){
+            registraMov(vecinos[pos].first, vecinos[pos].second, sim);
+            log.registraMovTabu(rutaLog, mejorCoste, vecinos[pos].first, vecinos[pos].second, it, ent);
+            guardaMov(vecinos[pos].first, vecinos[pos].second);
         }
+
+        costeActual = mejorCoste;
+        swap(sol[vecinos[pos].first], sol[vecinos[pos].second]);//Al estar pasado referencia se modifica el original
     }
 };
 
