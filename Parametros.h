@@ -14,7 +14,7 @@ using namespace std;
 
 // Parametros necesarios que se necesitan
 string rutaParam = "./parametros.txt";
-int numParam = 9;
+int numParam = 10;
 vector<string> parametros;
 // Parametros a cargar del archivo parametros.txt
 enum valor {
@@ -27,6 +27,7 @@ enum valor {
     CARPETA_LOG = 6,
     NUM_PRUEBAS = 7,
     TEN_TABU = 8,
+    ESTANCAMIENTO = 9,
 };
 
 #endif /* PARAMETROS_H */

@@ -88,7 +88,7 @@ public:
         }
         
         /**
-         * Funcion que registra si se a Diversificado o intensificado
+         * Función para añadir una cadena de texto al log
          * @param elec
          */
         void registraElec(string log, string elec){
@@ -200,8 +200,8 @@ public:
             fs << "----------------------------------------------------\n";
             fs << " Movimiento : " << "[" << pos1 << ", " << pos2 << "]\n";
             fs << " Coste :      " << coste << "\n";
-            fs << " Iteración :  " << it << "\n";
             fs << " Entorno :    " << ent << "\n";
+            fs << " Iteración :  " << it << "\n";
         }
 
         /**

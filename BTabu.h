@@ -11,6 +11,7 @@
 #include <vector>
 #include <limits>
 #include <list>
+#include <iostream>
 
 #include "Parametros.h"
 #include "FuncionesComunes.h"
@@ -21,6 +22,17 @@ using namespace std;
 
 class BTabu {
 public:
+    /*
+     * Dudas
+     * ¿Todos los vecinos se meten en la lista tabu?
+     * ¿Cojo el mejor de los 10 vecinos generados?¿O el mejor de los 1000? Mejor de las 1000
+     * ¿Cuando reinicializo, a los 1000 vecinos? NO, si 100 veces empeoras la mejor solucion, entonces reinicializas
+     * En caso afirmativo,¿Como cojo el mejor de los 1000 y reinizializo a la vez, es imposible?
+     * En caso negativo,¿Cada cuanto reinicializo?
+     * La lista tabu es del mismo tamaño de la tenencia, ¿misma lista de movimientos y tabu o mejor listas separadas? Mirar si se puede hacer todo en una lista
+     * Estancamiento mejora con el mejor del momento no con el mejor de mejores
+     */
+    
     
     /**
      * Función que realiza la busqueda tabú
@@ -37,46 +49,95 @@ public:
         // inicializo la matriz
         iniciaMatriz(flu.size());
         
-        // Creo la solución inicial de partida
-        vector<int> solActual(flu.size());
-        vector<int> mejorSolucion(flu.size());
-        solActual = creaSolucion(flu.size());
-        mejorSolucion = solActual;
-        int costeAc = calculaCoste(solActual, flu, dis, sim);
-        int mejorCoste = costeAc;
+        // Creo la los vectores que van a ir conteniendo las soluciones
+        vector<int> mejorSolucion(flu.size()); // Mejor de mejores
+        vector<int> mejorParcial(flu.size()); // Mejor del momento
+        vector<int> mejorPeor(flu.size()); // Mejor solucion de todas las peores
+        vector<int> solParcial(flu.size()); // Solucion actual
+        
+        // Creo la solución de partida
+        mejorSolucion = creaSolucion(flu.size());
+        mejorParcial = mejorSolucion;
+        mejorPeor = mejorSolucion;
+        solParcial = mejorSolucion;
+        
+        // Calculo el coste de la solución generada
+        int mejorCoste = calculaCoste(mejorParcial, flu, dis, sim);
+        int costeMejorParcial = mejorCoste;
+        int costeMejorPeor = std::numeric_limits<int>::max(); // Para asi irme a la mejor solucion, aunque ninguna de las generadas sea mejor que la de partida
+        int costeSol = mejorCoste;
+        
+        // Registro la solución de partida
         creaLog(log, prueba);
-        log.registraLogSol(rutaLog ,solActual, costeAc);
+        log.registraLogSol(rutaLog ,mejorParcial, mejorCoste);
         
         int k = 0; // Limite de 50000 evaluaciones
         int intentos = 0; // Limite de 100 intentos
+        int estancamiento = 0; // Limite del estancamiento, 100 entornos
+        
         while( k <= stoi(parametros[LIM_EVA_LOCAL])){
-            // Busco 10 vecinos 
-            if(generaCambios(log, costeAc, solActual, k, intentos, flu, dis, sim)){
-                k++;
-                intentos = 0;
-                guardaMov(solActual);
-            }else{
-                intentos++;
-            }
             
-            if(intentos == stoi(parametros[NUM_SOLU_LOCAL])){              
-                k++;
+            // Busco 10 vecinos, cada iteración se calcula con el vecino anterior
+            generaCambios(log, costeSol, solParcial, k, intentos, flu, dis, sim);
+            if(costeMejorParcial > costeSol){
+                k++;  
+                if(k == 25462)
+                    cout << "ya" << endl;
                 intentos = 0;
+                estancamiento = 0;
+                guardaMov(solParcial);
+                mejorParcial = solParcial;
+                costeMejorParcial = costeSol;
                 
-                //Almaceno la mejor solución hasta el momento
-                if(costeAc < mejorCoste){
-                    mejorSolucion = solActual;
-                    mejorCoste = costeAc;
+                // Compruebo la solución
+                if( mejorCoste > costeMejorParcial){
+                    mejorSolucion = mejorParcial;
+                    mejorCoste = costeMejorParcial;
                 }
                 
-                movRecientes.clear();
-                solActual = nuevaSol(log);
-                costeAc = calculaCoste(solActual, flu, dis, sim);
-                log.registraLogSol(rutaLog ,solActual, costeAc);
-                
+            }else{
+                intentos++;
+                if( costeMejorPeor > costeSol){
+                    mejorPeor = solParcial;
+                    costeMejorPeor = costeSol;
+                }
+                solParcial = mejorParcial;
+                costeSol = costeMejorParcial;
             }
-            //cout << "Iteracion : " << k << "\n";
+            
+            if(intentos == stoi(parametros[MAX_INTENTOS_LOCAL])){              
+                k++;
+                estancamiento++;
+                intentos = 0;
+                
+                if(estancamiento == stoi(parametros[ESTANCAMIENTO])){
+                    // Limpio la memoria
+                    movRecientes.clear();
+                    posLista = 0;
+                    estancamiento = 0;
+                    
+                    log.registraElec(rutaLog,"Estancamiento");
+                    
+                    // Creo la nueva solucion, diversificando o intensificando
+                    solParcial = nuevaSol(log);
+                    mejorParcial = solParcial;
+                    costeSol = calculaCoste(mejorParcial, flu, dis, sim);
+                    costeMejorParcial = costeSol;
+                    
+                    // Resgistro la nueva solucion
+                    log.registraLogSol(rutaLog ,mejorParcial, costeMejorParcial);
+                }else{
+                    // Cambio la solucion actual por la mejor de los 100 entornos
+                    solParcial = mejorPeor;
+                    costeSol = costeMejorPeor;                    
+                }
+                
+                // Para asi irme a la mejor solucion, aunque ninguna de las generadas sea mejor que la de partida
+                costeMejorPeor = std::numeric_limits<int>::max();
+            }
         }
+        
+
         string sol = " Diversificaciones : " + to_string(numDiv) + " | Intensificaciones : " + to_string(numInt) + "\n";
         log.registraElec(rutaLog, sol);
         return mejorSolucion;
@@ -151,18 +212,6 @@ private:
     }
     
     /**
-     * Función que guarda el movimiento generado
-     * @param sol Movimiento generado
-     */
-    void guardaMov(vector<int> sol){
-        list<vector<int>>::iterator it = movRecientes.begin();
-        for(int i = 0; i < posLista; i++)
-            it++;
-        posLista++;
-        movRecientes.insert(it, sol);
-    }
-    
-    /**
      * Función para diversificar
      * @return Solcuioón
      */
@@ -171,8 +220,14 @@ private:
         for(int i = 0; i < frecuencias.size();i++){
             int pos;
             int menor = std::numeric_limits<int>::max();
-            for(int j = i; j < frecuencias.size(); j++){
-                if(frecuencias[i][j] < menor){
+            for(int j = 0; j < frecuencias.size(); j++){// Cuidado con asimetricos
+                bool esta = false;
+                for(int k = 0; k < sol.size(); k++){
+                    if(sol[k] == j){
+                        esta = true;
+                    }
+                }
+                if(frecuencias[i][j] <= menor && !esta){
                     pos = j;
                     menor = frecuencias[i][j];
                 }
@@ -192,17 +247,15 @@ private:
             int pos;
             int mayor = -1;
             for(int j = 0; j < frecuencias.size(); j++){// Cuidado con asimetricos
-                if(frecuencias[i][j] > mayor){
-                    bool esta = false;
-                    for(int k = 0; k < i; k++){
-                        if(sol[k] == j){
-                            esta = true;
-                        }
-                    } 
-                    if(!esta){
-                        pos = j;
-                        mayor = frecuencias[i][j];
+                bool esta = false;
+                for(int k = 0; k < sol.size(); k++){
+                    if(sol[k] == j){
+                        esta = true;
                     }
+                }
+                if(frecuencias[i][j] >= mayor && !esta){
+                    pos = j;
+                    mayor = frecuencias[i][j];
                 }
             }
             sol[i] = pos;
@@ -215,9 +268,8 @@ private:
      * solución correspondiente
      * @return Solución de partida
      */
-    vector<int> nuevaSol(CargarFichero& log){
-        float pro = Randfloat(0,1);
-        if(pro > 0.5){
+    vector<int> nuevaSol(CargarFichero& log){ 
+        if( Randfloat(0,1) > 0.5 ){
             numDiv++;
             log.registraElec(rutaLog, "Diversificación");
             return diversificar();
@@ -237,13 +289,26 @@ private:
      */
     bool compruebaSol(vector<int> sol, int pos1, int pos2){
         swap(sol[pos1], sol[pos2]);//Al estar pasado por copia no se modifica el original
-        
-        for (list<vector<int>>::iterator it = movRecientes.begin(); it != movRecientes.end(); it++){
-            if(*it == sol){
-                return false;
+        if(posLista > 0){
+            for (list<vector<int>>::iterator it = movRecientes.begin(); it != movRecientes.end(); it++){
+                if(*it == sol){
+                    return false;
+                }
             }
         }
         return true;
+    }
+    
+    /**
+     * Función que guarda el movimiento generado
+     * @param sol Movimiento generado
+     */
+    void guardaMov(vector<int> sol){
+        list<vector<int>>::iterator it = movRecientes.begin();
+        for(int i = 0; i < posLista; i++)
+            it++;
+        posLista++;
+        movRecientes.insert(it, sol);
     }
     
     /**
@@ -255,7 +320,7 @@ private:
      * @param dis Matriz de distancia
      * @return Devuelve True si se ha movido a algun vecino, False si no lo hace
      */
-    bool generaCambios(CargarFichero& log, int& costeActual, vector<int>& sol,
+    void generaCambios(CargarFichero& log, int& costeActual, vector<int>& sol,
             int it, int ent, vector<vector<int>>& flu, vector<vector<int>>& dis, bool sim){
         int mejorCoste = std::numeric_limits<int>::max();
         int pos = -1;
@@ -263,8 +328,8 @@ private:
         
         // Creo los diez posibles vecinos de forma aleatoria
         while( vecinos.size() < stoi(parametros[NUM_SOLU_LOCAL])){
-            int pos1 = Randint(0,sol.size()-1);
-            int pos2 = Randint(0,sol.size()-1);
+            int pos1 = Randint(0,flu.size()-1);
+            int pos2 = Randint(0,flu.size()-1);
             if(pos1 != pos2){
                 // Compruebo que la solución no esta ya creada
                 bool esta = false;
@@ -292,15 +357,16 @@ private:
             }
         }
         
-        if(pos != -1 && mejorCoste < costeActual){
-            costeActual = calculaCoste2(costeActual, vecinos[pos].first, vecinos[pos].second, sol,flu, dis);
-            registraMov(vecinos[pos].first, vecinos[pos].second, sim);
-            log.registraMovTabu(rutaLog, costeActual, vecinos[pos].first, vecinos[pos].second, it, ent);
+        if(pos != -1){
+            if(costeActual > mejorCoste){
+                registraMov(vecinos[pos].first, vecinos[pos].second, sim);
+                log.registraMovTabu(rutaLog, mejorCoste, vecinos[pos].first, vecinos[pos].second, it, ent);
+                guardaMov(sol);
+            }
+
+            costeActual = mejorCoste;
             swap(sol[vecinos[pos].first], sol[vecinos[pos].second]);//Al estar pasado referencia se modifica el original
-            guardaMov(sol);
-            return true;
         }
-        return false;
     }
 };
 

@@ -7,3 +7,4 @@ evaluzaciones_totales = 50000
 carpeta_logs = ./_logs/
 num_pruebas = 5
 tenencia_tabu = 5
+estancamiento = 100
