@@ -131,7 +131,7 @@ private:
         }
         
         if(pos != -1 && mejorCoste < costeActual){
-            costeActual = calculaCoste2(costeActual, vecinos[pos].first, vecinos[pos].second, sol,flu, dis);
+            costeActual = mejorCoste;
             log.registraMov(rutaLog, costeActual, it, vecinos[pos].first, vecinos[pos].second);
             swap(sol[vecinos[pos].first], sol[vecinos[pos].second]);//Al estar pasado referencia se modifica el original
             return true;

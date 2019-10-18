@@ -1,5 +1,5 @@
 carpeta_datos = ./_data/
-input = malaga04.dat
+input = madrid04.dat
 dni = 26515294
 num_soluciones = 10
 intentos_posibles = 100

@@ -174,7 +174,7 @@ public:
      * @param pos2 Posición 2
      * @param it N. de iteración
      */
-    void registraMov(string log, int coste, int pos1, int pos2, int it) {
+    void registraMov(string log, int coste, int it, int pos1, int pos2) {
         ofstream fs;
         fs.open(log, std::ios_base::app);
         fs << "----------------------------------------------------\n";
